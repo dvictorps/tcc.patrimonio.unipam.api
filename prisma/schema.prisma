@@ -1,0 +1,1035 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:@localhost:3306/informatica"
+}
+
+model agendatreinamentomultimidia {
+  IdAgendamento   Int
+  IdPessoa        Int
+  IdProfessor     Int
+  DataTreinamento DateTime  @db.DateTime(0)
+  DataCriacao     DateTime  @db.DateTime(0)
+  DataModificacao DateTime? @db.DateTime(0)
+  professor       professor @relation(fields: [IdProfessor], references: [IdProfessor], onUpdate: Restrict, map: "FKAgendaTrei341844")
+  pessoa          pessoa    @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKAgendaTrei918453")
+
+  @@id([IdAgendamento, IdPessoa, IdProfessor])
+  @@index([IdProfessor], map: "FKAgendaTrei341844")
+  @@index([IdPessoa], map: "FKAgendaTrei918453")
+}
+
+model agendatreinamentosalasinformatica {
+  IdAgendamento   Int
+  IdPessoa        Int
+  IdProfessor     Int
+  DataTreinamento DateTime  @db.DateTime(0)
+  DataCriacao     DateTime  @db.DateTime(0)
+  DataModificacao DateTime  @db.DateTime(0)
+  professor       professor @relation(fields: [IdProfessor], references: [IdProfessor], onUpdate: Restrict, map: "FKAgendaTrei647426")
+  pessoa          pessoa    @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKAgendaTrei70817")
+
+  @@id([IdAgendamento, IdPessoa, IdProfessor])
+  @@index([IdProfessor], map: "FKAgendaTrei647426")
+  @@index([IdPessoa], map: "FKAgendaTrei70817")
+}
+
+model anexonotafiscal {
+  IdAnexoNotaFiscal Int        @id @default(autoincrement())
+  NomeArquivo       String     @db.VarChar(100)
+  ConteudoArquivo   Bytes      @db.MediumBlob
+  TipoArquivo       String     @db.VarChar(20)
+  TamanhoArquivo    Int
+  IdNotaFiscal      Int
+  notafiscal        notafiscal @relation(fields: [IdNotaFiscal], references: [IdNotaFiscal], onUpdate: Restrict, map: "FKAnexoNotaF777634")
+
+  @@index([IdNotaFiscal], map: "FKAnexoNotaF777634")
+}
+
+model armazenamento {
+  IdDisco               Int                     @id @default(autoincrement())
+  ModeloDisco           String                  @db.VarChar(20)
+  TamanhoDisco          Int
+  IdTipoDisco           Int                     @db.TinyInt
+  IdFabricanteDisco     Int
+  fabricantedisco       fabricantedisco         @relation(fields: [IdFabricanteDisco], references: [IdFabricanteDisco], onUpdate: Restrict, map: "FKArmazename648134")
+  tipodisco             tipodisco               @relation(fields: [IdTipoDisco], references: [IdTipoDisco], onUpdate: Restrict, map: "FKArmazename849847")
+  gabinetearmazenamento gabinetearmazenamento[]
+
+  @@index([IdFabricanteDisco], map: "FKArmazename648134")
+  @@index([IdTipoDisco], map: "FKArmazename849847")
+}
+
+model blocodepartamento {
+  IdBlocoDepartamento        Int            @id @default(autoincrement()) @db.TinyInt
+  DescricaoBlocoDepartamento String         @db.VarChar(20)
+  departamento               departamento[]
+}
+
+model blocosala {
+  IdBlocoSala        Int    @id @default(autoincrement()) @db.TinyInt
+  DescricaoBlocoSala String @db.VarChar(10)
+  sala               sala[]
+}
+
+model categoriaequipamento {
+  IdCategoriaEquipamento        Int           @id @default(autoincrement())
+  DescricaoCategoriaEquipamento String        @db.VarChar(20)
+  equipamento                   equipamento[]
+}
+
+model cidade {
+  IdCidade   Int       @id @default(autoincrement())
+  NomeCidade String    @db.VarChar(150)
+  IdEstado   Int       @db.TinyInt
+  estado     estado    @relation(fields: [IdEstado], references: [IdEstado], onUpdate: Restrict, map: "FKCidade86950")
+  empresa    empresa[]
+
+  @@index([IdEstado], map: "FKCidade86950")
+}
+
+model comentarioguia {
+  IdComentarioGuia          Int
+  IdPessoa                  Int
+  IdGuia                    Int
+  ComentarioGuia            String    @db.VarChar(150)
+  DataCriacaoComentario     DateTime  @db.DateTime(0)
+  DataModificacaoComentario DateTime? @db.DateTime(0)
+  guia                      guia      @relation(fields: [IdGuia], references: [IdGuia], onUpdate: Restrict, map: "FKComentario204632")
+  pessoa                    pessoa    @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKComentario227734")
+
+  @@id([IdComentarioGuia, IdPessoa, IdGuia])
+  @@index([IdGuia], map: "FKComentario204632")
+  @@index([IdPessoa], map: "FKComentario227734")
+}
+
+model concluinteemprestimoequipamento {
+  IdPessoa                      Int
+  IdPedidoEmprestimo            Int
+  DataBaixaEmprestimo           DateTime                      @db.DateTime(0)
+  IdCondicaoEquipamento         Int                           @db.TinyInt
+  pessoa                        pessoa                        @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKConcluinte112622")
+  pedidoemprestimoequipamento   pedidoemprestimoequipamento   @relation(fields: [IdPedidoEmprestimo], references: [IdPedidoEmprestimo], onUpdate: Restrict, map: "FKConcluinte288714")
+  condicaoemprestimoequipamento condicaoemprestimoequipamento @relation(fields: [IdCondicaoEquipamento], references: [IdCondicaoEquipamento], onUpdate: Restrict, map: "FKConcluinte534039")
+
+  @@id([IdPessoa, IdPedidoEmprestimo])
+  @@index([IdPedidoEmprestimo], map: "FKConcluinte288714")
+  @@index([IdCondicaoEquipamento], map: "FKConcluinte534039")
+}
+
+model concluinteguia {
+  IdPessoa           Int
+  IdGuia             Int
+  HoraFimAtendimento DateTime @db.DateTime(0)
+  guia               guia     @relation(fields: [IdGuia], references: [IdGuia], onUpdate: Restrict, map: "FKConcluinte14257")
+  pessoa             pessoa   @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKConcluinte418109")
+
+  @@id([IdPessoa, IdGuia])
+  @@index([IdGuia], map: "FKConcluinte14257")
+}
+
+model concluintetreinamentomultimidia {
+  IdPessoa      Int
+  dProfessor    Int
+  DataConclusao DateTime  @db.DateTime(0)
+  professor     professor @relation(fields: [dProfessor], references: [IdProfessor], onUpdate: Restrict, map: "FKConcluinte160518")
+  pessoa        pessoa    @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKConcluinte198192")
+
+  @@id([IdPessoa, dProfessor])
+  @@index([dProfessor], map: "FKConcluinte160518")
+}
+
+model concluintetreinamentosalainformatica {
+  IdPessoa      Int
+  IdProfessor   Int
+  DataConclusao DateTime  @db.DateTime(0)
+  professor     professor @relation(fields: [IdProfessor], references: [IdProfessor], onUpdate: Restrict, map: "FKConcluinte215360")
+  pessoa        pessoa    @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKConcluinte791969")
+
+  @@id([IdPessoa, IdProfessor])
+  @@index([IdProfessor], map: "FKConcluinte215360")
+}
+
+model condicaoemprestimoequipamento {
+  IdCondicaoEquipamento           Int                               @id @default(autoincrement()) @db.TinyInt
+  DescricaoCondicaoEquipamento    String                            @db.VarChar(20)
+  concluinteemprestimoequipamento concluinteemprestimoequipamento[]
+  equipamentoemprestimo           equipamentoemprestimo[]
+}
+
+model conexaodatashow {
+  IdEquipamento         Int
+  IdTipoEntradaDatashow Int
+  QuantidadeConexao     Int              @db.TinyInt
+  entradasdatashow      entradasdatashow @relation(fields: [IdTipoEntradaDatashow], references: [IdTipoEntrada], onUpdate: Restrict, map: "FKConexaoDat803819")
+  datashow              datashow         @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKConexaoDat869090")
+
+  @@id([IdEquipamento, IdTipoEntradaDatashow])
+  @@index([IdTipoEntradaDatashow], map: "FKConexaoDat803819")
+}
+
+model conexaogabinete {
+  IdEquipamento     Int
+  IdTipoEntrada     Int
+  QuantidadeEntrada Int             @db.TinyInt
+  entradagabinete   entradagabinete @relation(fields: [IdTipoEntrada], references: [IdTipoEntrada], onUpdate: Restrict, map: "FKConexaoGab869405")
+  gabinete          gabinete        @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKConexaoGab882675")
+
+  @@id([IdEquipamento, IdTipoEntrada])
+  @@index([IdTipoEntrada], map: "FKConexaoGab869405")
+}
+
+model conexaoimpressora {
+  IdEquipamento           Int
+  IdTipoEntradaImpressora Int               @db.TinyInt
+  QuantidadeConexao       Int               @db.TinyInt
+  entradaimpressora       entradaimpressora @relation(fields: [IdTipoEntradaImpressora], references: [IdTipoEntradaImpressora], onUpdate: Restrict, map: "FKConexaoImp598602")
+  impressora              impressora        @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKConexaoImp854746")
+
+  @@id([IdEquipamento, IdTipoEntradaImpressora])
+  @@index([IdTipoEntradaImpressora], map: "FKConexaoImp598602")
+}
+
+model conexaomonitor {
+  IdTipoEntrada     Int            @db.TinyInt
+  IdEquipamento     Int
+  QuantidadeEntrada Int            @db.TinyInt
+  monitor           monitor        @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKConexaoMon334103")
+  entradamonitor    entradamonitor @relation(fields: [IdTipoEntrada], references: [IdTipoEntrada], onUpdate: Restrict, map: "FKConexaoMon906856")
+
+  @@id([IdTipoEntrada, IdEquipamento])
+  @@index([IdEquipamento], map: "FKConexaoMon334103")
+}
+
+model conexaonotebook {
+  IdEquipamento     Int
+  IdTipoEntrada     Int             @db.TinyInt
+  QuantidadeEntrada Int             @db.TinyInt
+  entradanotebook   entradanotebook @relation(fields: [IdTipoEntrada], references: [IdTipoEntrada], onUpdate: Restrict, map: "FKConexaoNot273550")
+  notebook          notebook        @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKConexaoNot713179")
+
+  @@id([IdEquipamento, IdTipoEntrada])
+  @@index([IdTipoEntrada], map: "FKConexaoNot273550")
+}
+
+model conexaoscanner {
+  IdEquipamento        Int
+  IdTipoEntradaScanner Int            @db.TinyInt
+  QuantidadeEntrada    Int            @db.TinyInt
+  entradascanner       entradascanner @relation(fields: [IdTipoEntradaScanner], references: [IdTipoEntradaScanner], onUpdate: Restrict, map: "FKConexaoSca55130")
+  scanner              scanner        @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKConexaoSca951413")
+
+  @@id([IdEquipamento, IdTipoEntradaScanner])
+  @@index([IdTipoEntradaScanner], map: "FKConexaoSca55130")
+}
+
+model datashow {
+  IdEquipamento     Int               @id
+  Luminosidade      String            @db.VarChar(20)
+  AutonomiaLampada  String?           @db.VarChar(20)
+  IdTipoLampada     Int               @db.TinyInt
+  IdResolucao       Int               @db.TinyInt
+  conexaodatashow   conexaodatashow[]
+  equipamento       equipamento       @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKDatashow43947")
+  resolucaodatashow resolucaodatashow @relation(fields: [IdResolucao], references: [IdResolucao], onUpdate: Restrict, map: "FKDatashow515389")
+  tipolampada       tipolampada       @relation(fields: [IdTipoLampada], references: [IdTipoLampada], onUpdate: Restrict, map: "FKDatashow537981")
+  trocalampada      trocalampada[]
+
+  @@index([IdResolucao], map: "FKDatashow515389")
+  @@index([IdTipoLampada], map: "FKDatashow537981")
+}
+
+model departamento {
+  IdDepartamento         Int                    @id @default(autoincrement())
+  NomeDepartamento       String                 @db.VarChar(150)
+  IdSituacaoDepartamento Int                    @db.TinyInt
+  IdBlocoDepartamento    Int                    @db.TinyInt
+  IdTipoDepartamento     Int                    @db.TinyInt
+  situacaodepartamento   situacaodepartamento   @relation(fields: [IdSituacaoDepartamento], references: [IdSituacaoDepartamento], onUpdate: Restrict, map: "FKDepartamen164819")
+  tipodepartamento       tipodepartamento       @relation(fields: [IdTipoDepartamento], references: [IdTipoDepartamento], onUpdate: Restrict, map: "FKDepartamen456004")
+  blocodepartamento      blocodepartamento      @relation(fields: [IdBlocoDepartamento], references: [IdBlocoDepartamento], onUpdate: Restrict, map: "FKDepartamen983123")
+  equipamento            equipamento[]
+  guia                   guia[]
+  historicoequipamento   historicoequipamento[]
+  numeroip               numeroip[]
+
+  @@index([IdSituacaoDepartamento], map: "FKDepartamen164819")
+  @@index([IdTipoDepartamento], map: "FKDepartamen456004")
+  @@index([IdBlocoDepartamento], map: "FKDepartamen983123")
+}
+
+model empresa {
+  IdEmpresa         Int           @id @default(autoincrement())
+  NomeEmpresa       String        @db.VarChar(150)
+  NomeRepresentante String?       @db.VarChar(100)
+  SiteEmpresa       String?       @db.VarChar(150)
+  EmailEmpresa      String?       @db.VarChar(150)
+  TelefoneEmpresa   Int?
+  IdCidade          Int
+  cidade            cidade        @relation(fields: [IdCidade], references: [IdCidade], onUpdate: Restrict, map: "FKEmpresa270845")
+  equipamento       equipamento[]
+  notafiscal        notafiscal[]
+
+  @@index([IdCidade], map: "FKEmpresa270845")
+}
+
+model entradagabinete {
+  IdTipoEntrada            Int               @id @default(autoincrement())
+  DescricaoEntradaGabinete String            @db.VarChar(20)
+  conexaogabinete          conexaogabinete[]
+}
+
+model entradaimpressora {
+  IdTipoEntradaImpressora Int                 @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoEntrada    String              @db.VarChar(20)
+  conexaoimpressora       conexaoimpressora[]
+}
+
+model entradamonitor {
+  IdTipoEntrada    Int              @id @default(autoincrement()) @db.TinyInt
+  DescricaoEntrada String           @db.VarChar(20)
+  conexaomonitor   conexaomonitor[]
+}
+
+model entradanotebook {
+  IdTipoEntrada    Int               @id @default(autoincrement()) @db.TinyInt
+  DescricaoEntrada String            @db.VarChar(20)
+  conexaonotebook  conexaonotebook[]
+}
+
+model entradascanner {
+  IdTipoEntradaScanner Int              @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoEntrada String           @db.VarChar(20)
+  conexaoscanner       conexaoscanner[]
+}
+
+model entradasdatashow {
+  IdTipoEntrada        Int               @id @default(autoincrement())
+  DescricaoTipoEntrada String            @db.VarChar(20)
+  conexaodatashow      conexaodatashow[]
+}
+
+model equipamento {
+  IdEquipamento          Int                     @id @default(autoincrement())
+  Patrimonio             String                  @db.VarChar(20)
+  DescricaoEquipamento   String                  @db.VarChar(50)
+  NumeroSerial           String                  @db.VarChar(30)
+  DataAquisicao          DateTime                @db.Date
+  VencimentoGarantia     DateTime                @db.Date
+  DataCadastro           DateTime                @db.DateTime(0)
+  DataModificacao        DateTime?               @db.DateTime(0)
+  IdEmpresa              Int
+  IdCategoriaEquipamento Int
+  IdSituacaoEquipamento  Int                     @db.TinyInt
+  IdFabricante           Int
+  IdDepartamento         Int
+  datashow               datashow?
+  categoriaequipamento   categoriaequipamento    @relation(fields: [IdCategoriaEquipamento], references: [IdCategoriaEquipamento], onUpdate: Restrict, map: "FKEquipament269")
+  fabricante             fabricante              @relation(fields: [IdFabricante], references: [IdFabricante], onUpdate: Restrict, map: "FKEquipament29013")
+  situacaoequipamento    situacaoequipamento     @relation(fields: [IdSituacaoEquipamento], references: [IdSituacaoEquipamento], onUpdate: Restrict, map: "FKEquipament310433")
+  empresa                empresa                 @relation(fields: [IdEmpresa], references: [IdEmpresa], onUpdate: Restrict, map: "FKEquipament462011")
+  departamento           departamento            @relation(fields: [IdDepartamento], references: [IdDepartamento], onUpdate: Restrict, map: "FKEquipament67720")
+  equipamentoemprestimo  equipamentoemprestimo[]
+  gabinete               gabinete?
+  historicoequipamento   historicoequipamento[]
+  impressora             impressora?
+  monitor                monitor?
+  notafiscalequipamento  notafiscalequipamento[]
+  notebook               notebook?
+  numeroip               numeroip[]
+  scanner                scanner?
+  serieequipamento       serieequipamento[]
+
+  @@index([IdCategoriaEquipamento], map: "FKEquipament269")
+  @@index([IdFabricante], map: "FKEquipament29013")
+  @@index([IdSituacaoEquipamento], map: "FKEquipament310433")
+  @@index([IdEmpresa], map: "FKEquipament462011")
+  @@index([IdDepartamento], map: "FKEquipament67720")
+}
+
+model equipamentoemprestimo {
+  IdEquipamentoEmprestimo       Int                           @id @default(autoincrement())
+  DescricaoItem                 String                        @db.VarChar(50)
+  IdCondicaoEquipamento         Int                           @db.TinyInt
+  IdEquipamento                 Int
+  equipamento                   equipamento                   @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKEquipament238464")
+  condicaoemprestimoequipamento condicaoemprestimoequipamento @relation(fields: [IdCondicaoEquipamento], references: [IdCondicaoEquipamento], onUpdate: Restrict, map: "FKEquipament84856")
+  pedidoequipamento             pedidoequipamento[]
+
+  @@index([IdEquipamento], map: "FKEquipament238464")
+  @@index([IdCondicaoEquipamento], map: "FKEquipament84856")
+}
+
+model estado {
+  IdEstado   Int      @id @default(autoincrement()) @db.TinyInt
+  NomeEstado String   @db.VarChar(50)
+  UF         String   @db.VarChar(2)
+  cidade     cidade[]
+}
+
+model fabricante {
+  IdFabricante   Int           @id @default(autoincrement())
+  NomeFabricante String        @db.VarChar(100)
+  equipamento    equipamento[]
+  modelo         modelo[]
+}
+
+model fabricantedisco {
+  IdFabricanteDisco   Int             @id @default(autoincrement())
+  DescricaoFabricante String          @db.VarChar(20)
+  armazenamento       armazenamento[]
+}
+
+model fabricanteplacamae {
+  IdFabricantePlacaMae Int        @id @default(autoincrement())
+  DescricaoFabricante  String     @db.VarChar(20)
+  placamae             placamae[]
+}
+
+model fabricanteprocessador {
+  IdFabricanteProcessador Int           @id @default(autoincrement()) @db.TinyInt
+  DescricaoFabricante     String        @db.VarChar(10)
+  processador             processador[]
+}
+
+model fatorformamonitor {
+  IdFatorForma        Int       @id @default(autoincrement()) @db.TinyInt
+  DescricaoFatorForma String    @db.VarChar(20)
+  monitor             monitor[]
+}
+
+model formacontato {
+  IdFormaContato        Int    @id @default(autoincrement()) @db.TinyInt
+  DescricaoFormaContato String @db.VarChar(20)
+  guia                  guia[]
+}
+
+model fotoperfil {
+  IdFotoPerfil Int
+  IdPessoa     Int
+  NomeFoto     String @db.VarChar(100)
+  ConteudoFoto Bytes  @db.MediumBlob
+  TipoFoto     String @db.VarChar(20)
+  TamanhoFoto  Int
+  pessoa       pessoa @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKFotoPerfil867658")
+
+  @@id([IdFotoPerfil, IdPessoa])
+  @@index([IdPessoa], map: "FKFotoPerfil867658")
+}
+
+model gabinete {
+  IdEquipamento         Int                     @id
+  DescricaoGabinete     String                  @db.VarChar(50)
+  ProcessadorPlacaMae   String                  @db.VarChar(50)
+  IdSistemaOperacional  Int                     @db.TinyInt
+  conexaogabinete       conexaogabinete[]
+  equipamento           equipamento             @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKGabinete331936")
+  sistemaoperacional    sistemaoperacional      @relation(fields: [IdSistemaOperacional], references: [IdSistemaOperacional], onUpdate: Restrict, map: "FKGabinete60210")
+  gabinetearmazenamento gabinetearmazenamento[]
+  gabinetememoria       gabinetememoria[]
+
+  @@index([IdSistemaOperacional], map: "FKGabinete60210")
+}
+
+model gabinetearmazenamento {
+  IdEquipamento   Int
+  IdDisco         Int
+  QuantidadeDisco Int           @db.TinyInt
+  armazenamento   armazenamento @relation(fields: [IdDisco], references: [IdDisco], onUpdate: Restrict, map: "FKGabineteAr416396")
+  gabinete        gabinete      @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKGabineteAr586393")
+
+  @@id([IdEquipamento, IdDisco])
+  @@index([IdDisco], map: "FKGabineteAr416396")
+}
+
+model gabinetememoria {
+  IdEquipamento     Int
+  IdMemoria         Int
+  QuantidadeMemoria Int      @db.TinyInt
+  gabinete          gabinete @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKGabineteMe417575")
+  memoria           memoria  @relation(fields: [IdMemoria], references: [IdMemoria], onUpdate: Restrict, map: "FKGabineteMe603412")
+
+  @@id([IdEquipamento, IdMemoria])
+  @@index([IdMemoria], map: "FKGabineteMe603412")
+}
+
+model guia {
+  IdGuia             Int               @id @default(autoincrement())
+  UsuarioSolicitante String            @db.VarChar(50)
+  EmailSolicitante   String?           @db.VarChar(100)
+  Assunto            String            @db.VarChar(50)
+  Mensagem           String            @db.VarChar(250)
+  DataCriacao        DateTime          @db.DateTime(0)
+  DataModificacao    DateTime?         @db.DateTime(0)
+  IdFormaContato     Int               @db.TinyInt
+  IdSituacaoGuia     Int               @db.TinyInt
+  IdSetorResponsavel Int               @db.TinyInt
+  IdDepartamento     Int
+  IdPessoa           Int
+  IdTipoEquipamento  Int               @db.TinyInt
+  comentarioguia     comentarioguia[]
+  concluinteguia     concluinteguia[]
+  departamento       departamento      @relation(fields: [IdDepartamento], references: [IdDepartamento], onUpdate: Restrict, map: "FKGuia224984")
+  tipoequipamento    tipoequipamento   @relation(fields: [IdTipoEquipamento], references: [IdTipoEquipamento], onUpdate: Restrict, map: "FKGuia558379")
+  pessoa             pessoa            @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKGuia56053")
+  formacontato       formacontato      @relation(fields: [IdFormaContato], references: [IdFormaContato], onUpdate: Restrict, map: "FKGuia684766")
+  setorresponsavel   setorresponsavel  @relation(fields: [IdSetorResponsavel], references: [IdSetorResponsavel], onUpdate: Restrict, map: "FKGuia747950")
+  situacaoguia       situacaoguia      @relation(fields: [IdSituacaoGuia], references: [IdSituacaoGuia], onUpdate: Restrict, map: "FKGuia999817")
+  guiaequipamento    guiaequipamento[]
+  ocorrencia         ocorrencia[]
+  responsavelguia    responsavelguia[]
+
+  @@index([IdDepartamento], map: "FKGuia224984")
+  @@index([IdTipoEquipamento], map: "FKGuia558379")
+  @@index([IdPessoa], map: "FKGuia56053")
+  @@index([IdFormaContato], map: "FKGuia684766")
+  @@index([IdSetorResponsavel], map: "FKGuia747950")
+  @@index([IdSituacaoGuia], map: "FKGuia999817")
+}
+
+model guiaequipamento {
+  IdGuiaEquipamento Int    @id @default(autoincrement())
+  IdGuia            Int
+  Patrimonio        String @db.VarChar(20)
+  guia              guia   @relation(fields: [IdGuia], references: [IdGuia], onUpdate: Restrict, map: "FKGuiaEquipa951499")
+
+  @@index([IdGuia], map: "FKGuiaEquipa951499")
+}
+
+model historicoequipamento {
+  IdHistoricoMovimentacao Int
+  IdEquipamento           Int
+  IdDepartamento          Int
+  IdPessoa                Int
+  DataHoraModificacao     DateTime     @db.DateTime(0)
+  departamento            departamento @relation(fields: [IdDepartamento], references: [IdDepartamento], onUpdate: Restrict, map: "FKHistoricoE340306")
+  pessoa                  pessoa       @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKHistoricoE509237")
+  equipamento             equipamento  @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKHistoricoE969299")
+
+  @@id([IdHistoricoMovimentacao, IdEquipamento, IdDepartamento])
+  @@index([IdDepartamento], map: "FKHistoricoE340306")
+  @@index([IdPessoa], map: "FKHistoricoE509237")
+  @@index([IdEquipamento], map: "FKHistoricoE969299")
+}
+
+model impressora {
+  IdEquipamento         Int                 @id
+  FluxoTrabalho         String?             @db.VarChar(10)
+  IdTecnologiaImpressao Int                 @db.TinyInt
+  IdTamanhoPapel        Int                 @db.TinyInt
+  IdTipoImpressora      Int                 @db.TinyInt
+  IdTipoImpressao       Int                 @db.TinyInt
+  conexaoimpressora     conexaoimpressora[]
+  tamanhopapel          tamanhopapel        @relation(fields: [IdTamanhoPapel], references: [IdTamanhoPapel], onUpdate: Restrict, map: "FKImpressora168655")
+  equipamento           equipamento         @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKImpressora571503")
+  tipoimpressao         tipoimpressao       @relation(fields: [IdTipoImpressao], references: [IdTipoImpressao], onUpdate: Restrict, map: "FKImpressora669800")
+  tecnologiaimpressao   tecnologiaimpressao @relation(fields: [IdTecnologiaImpressao], references: [IdTecnologiaImpressao], onUpdate: Restrict, map: "FKImpressora777991")
+  tipoimpressora        tipoimpressora      @relation(fields: [IdTipoImpressora], references: [IdTipoImpressora], onUpdate: Restrict, map: "FKImpressora900684")
+
+  @@index([IdTamanhoPapel], map: "FKImpressora168655")
+  @@index([IdTipoImpressao], map: "FKImpressora669800")
+  @@index([IdTecnologiaImpressao], map: "FKImpressora777991")
+  @@index([IdTipoImpressora], map: "FKImpressora900684")
+}
+
+model marcalampada {
+  IdMarcaLampada        Int         @id @default(autoincrement())
+  DescricaoMarcaLampada String      @db.VarChar(50)
+  IdTipoLampada         Int         @db.TinyInt
+  tipolampada           tipolampada @relation(fields: [IdTipoLampada], references: [IdTipoLampada], onUpdate: Restrict, map: "FKMarcaLampa473381")
+
+  @@index([IdTipoLampada], map: "FKMarcaLampa473381")
+}
+
+model memoria {
+  IdMemoria            Int               @id @default(autoincrement())
+  FrequenciaMemoria    String            @db.VarChar(10)
+  DescricaoTipoMemoria String            @db.VarChar(10)
+  TamanhoMemoria       String            @db.VarChar(10)
+  gabinetememoria      gabinetememoria[]
+  memorianotebook      memorianotebook[]
+}
+
+model memorianotebook {
+  IdEquipamento    Int
+  IdMemoria        Int
+  QuantidadeModulo Int      @db.TinyInt
+  memoria          memoria  @relation(fields: [IdMemoria], references: [IdMemoria], onUpdate: Restrict, map: "FKMemoriaNot378409")
+  notebook         notebook @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKMemoriaNot990499")
+
+  @@id([IdEquipamento, IdMemoria])
+  @@index([IdMemoria], map: "FKMemoriaNot378409")
+}
+
+model modelo {
+  IdModelo        Int        @id @default(autoincrement())
+  DescricaoModelo String     @db.VarChar(100)
+  IdFabricante    Int
+  fabricante      fabricante @relation(fields: [IdFabricante], references: [IdFabricante], onUpdate: Restrict, map: "FKModelo98536")
+
+  @@index([IdFabricante], map: "FKModelo98536")
+}
+
+model monitor {
+  IdEquipamento     Int               @id
+  IdTipoDisplay     Int               @db.TinyInt
+  IdResolucao       Int               @db.TinyInt
+  IdFatorForma      Int               @db.TinyInt
+  IdTamanhoMonitor  Int               @db.TinyInt
+  conexaomonitor    conexaomonitor[]
+  resolucaomonitor  resolucaomonitor  @relation(fields: [IdResolucao], references: [IdResolucao], onUpdate: Restrict, map: "FKMonitor296305")
+  equipamento       equipamento       @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKMonitor307806")
+  tipodisplay       tipodisplay       @relation(fields: [IdTipoDisplay], references: [IdTipoDisplay], onUpdate: Restrict, map: "FKMonitor578333")
+  tamanhomonitor    tamanhomonitor    @relation(fields: [IdTamanhoMonitor], references: [IdTamanhoMonitor], onUpdate: Restrict, map: "FKMonitor816237")
+  fatorformamonitor fatorformamonitor @relation(fields: [IdFatorForma], references: [IdFatorForma], onUpdate: Restrict, map: "FKMonitor908066")
+
+  @@index([IdResolucao], map: "FKMonitor296305")
+  @@index([IdTipoDisplay], map: "FKMonitor578333")
+  @@index([IdTamanhoMonitor], map: "FKMonitor816237")
+  @@index([IdFatorForma], map: "FKMonitor908066")
+}
+
+model notafiscal {
+  IdNotaFiscal               Int                     @id @default(autoincrement())
+  ChaveAcesso                String                  @db.VarChar(100)
+  CNPJ                       Int
+  NomeFantasia               String                  @db.VarChar(100)
+  ValorNota                  Int
+  ValorUnitario              Int
+  InformacaoAdicionalProduto String?                 @db.VarChar(500)
+  InformacaoComplementar     String?                 @db.VarChar(500)
+  IdEmpresa                  Int
+  anexonotafiscal            anexonotafiscal[]
+  empresa                    empresa                 @relation(fields: [IdEmpresa], references: [IdEmpresa], onUpdate: Restrict, map: "FKNotaFiscal77134")
+  notafiscalequipamento      notafiscalequipamento[]
+
+  @@index([IdEmpresa], map: "FKNotaFiscal77134")
+}
+
+model notafiscalequipamento {
+  IdNotaFiscal  Int
+  IdEquipamento Int
+  notafiscal    notafiscal  @relation(fields: [IdNotaFiscal], references: [IdNotaFiscal], onUpdate: Restrict, map: "FKNotaFiscal337780")
+  equipamento   equipamento @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKNotaFiscal370179")
+
+  @@id([IdNotaFiscal, IdEquipamento])
+  @@index([IdEquipamento], map: "FKNotaFiscal370179")
+}
+
+model notebook {
+  IdEquipamento        Int                @id
+  TamanhoTela          Int                @db.TinyInt
+  IdSistemaOperacional Int                @db.TinyInt
+  IdProcessador        Int
+  conexaonotebook      conexaonotebook[]
+  memorianotebook      memorianotebook[]
+  sistemaoperacional   sistemaoperacional @relation(fields: [IdSistemaOperacional], references: [IdSistemaOperacional], onUpdate: Restrict, map: "FKNotebook113453")
+  equipamento          equipamento        @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKNotebook465991")
+  processador          processador        @relation(fields: [IdProcessador], references: [IdProcessador], onUpdate: Restrict, map: "FKNotebook872399")
+
+  @@index([IdSistemaOperacional], map: "FKNotebook113453")
+  @@index([IdProcessador], map: "FKNotebook872399")
+}
+
+model numeroip {
+  IdDepartamento Int
+  Equipamento    Int
+  NumeroIp       Int
+  departamento   departamento @relation(fields: [IdDepartamento], references: [IdDepartamento], onUpdate: Restrict, map: "FKNumeroIp648551")
+  equipamento    equipamento  @relation(fields: [Equipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKNumeroIp873993")
+
+  @@id([IdDepartamento, Equipamento])
+  @@index([Equipamento], map: "FKNumeroIp873993")
+}
+
+model ocorrencia {
+  IdOcorrencia Int
+  IdGuia       Int
+  IdSala       Int
+  IdProfessor  Int
+  guia         guia      @relation(fields: [IdGuia], references: [IdGuia], onUpdate: Restrict, map: "FKOcorrencia253641")
+  sala         sala      @relation(fields: [IdSala], references: [IdSala], onUpdate: Restrict, map: "FKOcorrencia268737")
+  professor    professor @relation(fields: [IdProfessor], references: [IdProfessor], onUpdate: Restrict, map: "FKOcorrencia602115")
+
+  @@id([IdOcorrencia, IdGuia])
+  @@index([IdGuia], map: "FKOcorrencia253641")
+  @@index([IdSala], map: "FKOcorrencia268737")
+  @@index([IdProfessor], map: "FKOcorrencia602115")
+}
+
+model pedidoemprestimoequipamento {
+  IdPedidoEmprestimo              Int                               @id @default(autoincrement())
+  IdPessoa                        Int
+  IdSituacaoEmprestimoEquipamento Int                               @db.TinyInt
+  NomeSolicitante                 String                            @db.VarChar(150)
+  EmailSolicitante                String                            @db.VarChar(150)
+  CpfSolicitante                  String                            @db.VarChar(11)
+  DataEmprestimo                  DateTime                          @db.DateTime(0)
+  DataPrevisaoEntrega             DateTime                          @db.Date
+  concluinteemprestimoequipamento concluinteemprestimoequipamento[]
+  situacaoemprestimoequipamento   situacaoemprestimoequipamento     @relation(fields: [IdSituacaoEmprestimoEquipamento], references: [IdSituacaoEmprestimoEquipamento], onUpdate: Restrict, map: "FKPedidoEmpr906314")
+  pessoa                          pessoa                            @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKPedidoEmpr921077")
+  pedidoequipamento               pedidoequipamento[]
+
+  @@index([IdSituacaoEmprestimoEquipamento], map: "FKPedidoEmpr906314")
+  @@index([IdPessoa], map: "FKPedidoEmpr921077")
+}
+
+model pedidoequipamento {
+  IdPedidoEmprestimo          Int
+  IdEquipamentoEmprestimo     Int
+  equipamentoemprestimo       equipamentoemprestimo       @relation(fields: [IdEquipamentoEmprestimo], references: [IdEquipamentoEmprestimo], onUpdate: Restrict, map: "FKPedidoEqui382095")
+  pedidoemprestimoequipamento pedidoemprestimoequipamento @relation(fields: [IdPedidoEmprestimo], references: [IdPedidoEmprestimo], onUpdate: Restrict, map: "FKPedidoEqui612319")
+
+  @@id([IdPedidoEmprestimo, IdEquipamentoEmprestimo])
+  @@index([IdEquipamentoEmprestimo], map: "FKPedidoEqui382095")
+}
+
+model pessoa {
+  IdPessoa                             Int                                    @id @default(autoincrement())
+  Nome                                 String                                 @db.VarChar(150)
+  Email                                String                                 @db.VarChar(150)
+  Usuario                              String                                 @db.VarChar(20)
+  Senha                                String                                 @db.VarChar(32)
+  DataCriacao                          DateTime                               @db.DateTime(0)
+  DataModificacao                      DateTime?                              @db.DateTime(0)
+  IdTipoPessoa                         Int                                    @db.TinyInt
+  IdSituacaoPessoa                     Int                                    @db.TinyInt
+  agendatreinamentomultimidia          agendatreinamentomultimidia[]
+  agendatreinamentosalasinformatica    agendatreinamentosalasinformatica[]
+  comentarioguia                       comentarioguia[]
+  concluinteemprestimoequipamento      concluinteemprestimoequipamento[]
+  concluinteguia                       concluinteguia[]
+  concluintetreinamentomultimidia      concluintetreinamentomultimidia[]
+  concluintetreinamentosalainformatica concluintetreinamentosalainformatica[]
+  fotoperfil                           fotoperfil[]
+  guia                                 guia[]
+  historicoequipamento                 historicoequipamento[]
+  pedidoemprestimoequipamento          pedidoemprestimoequipamento[]
+  situacaopessoa                       situacaopessoa                         @relation(fields: [IdSituacaoPessoa], references: [IdSituacaoPessoa], onUpdate: Restrict, map: "FKPessoa159743")
+  tipopessoa                           tipopessoa                             @relation(fields: [IdTipoPessoa], references: [IdTipoPessoa], onUpdate: Restrict, map: "FKPessoa688008")
+  responsavelguia                      responsavelguia[]
+  situacaoincidente_pessoa             situacaoincidente_pessoa[]
+
+  @@index([IdSituacaoPessoa], map: "FKPessoa159743")
+  @@index([IdTipoPessoa], map: "FKPessoa688008")
+}
+
+model placamae {
+  IdPlacaMae           Int                @id @default(autoincrement())
+  DescricaoModelo      String             @db.VarChar(20)
+  IdFabricantePlacaMae Int
+  IdSocket             Int                @db.TinyInt
+  socketprocessador    socketprocessador  @relation(fields: [IdSocket], references: [IdSocket], onUpdate: Restrict, map: "FKPlacaMae368543")
+  fabricanteplacamae   fabricanteplacamae @relation(fields: [IdFabricantePlacaMae], references: [IdFabricantePlacaMae], onUpdate: Restrict, map: "FKPlacaMae427829")
+  slotsplacamae        slotsplacamae[]
+
+  @@index([IdSocket], map: "FKPlacaMae368543")
+  @@index([IdFabricantePlacaMae], map: "FKPlacaMae427829")
+}
+
+model processador {
+  IdProcessador           Int                   @id @default(autoincrement())
+  NomeProcessador         String                @db.VarChar(20)
+  FrequenciaMaxima        String                @db.VarChar(10)
+  QuantidadeNucleo        Int                   @db.TinyInt
+  QuantidadeThread        Int?                  @db.TinyInt
+  IdFabricanteProcessador Int                   @db.TinyInt
+  IdSocket                Int                   @db.TinyInt
+  notebook                notebook[]
+  socketprocessador       socketprocessador     @relation(fields: [IdSocket], references: [IdSocket], onUpdate: Restrict, map: "FKProcessado685393")
+  fabricanteprocessador   fabricanteprocessador @relation(fields: [IdFabricanteProcessador], references: [IdFabricanteProcessador], onUpdate: Restrict, map: "FKProcessado686817")
+
+  @@index([IdSocket], map: "FKProcessado685393")
+  @@index([IdFabricanteProcessador], map: "FKProcessado686817")
+}
+
+model professor {
+  IdProfessor                          Int                                    @id @default(autoincrement())
+  NomeProfessor                        String                                 @db.VarChar(150)
+  EmailProfessor                       String                                 @db.VarChar(100)
+  EmailAlternativo                     String?                                @db.VarChar(100)
+  IdSituacaoProfessor                  Int                                    @db.TinyInt
+  IdSituacaoTreinamentoMultimidia      Int                                    @db.TinyInt
+  IdSituacaoTreinamentoSalaInformatica Int                                    @db.TinyInt
+  agendatreinamentomultimidia          agendatreinamentomultimidia[]
+  agendatreinamentosalasinformatica    agendatreinamentosalasinformatica[]
+  concluintetreinamentomultimidia      concluintetreinamentomultimidia[]
+  concluintetreinamentosalainformatica concluintetreinamentosalainformatica[]
+  ocorrencia                           ocorrencia[]
+  situacaotreinamentomultimidia        situacaotreinamentomultimidia          @relation(fields: [IdSituacaoTreinamentoMultimidia], references: [IdSituacaoTreinamentoMultimidia], onUpdate: Restrict, map: "FKProfessor133994")
+  situacaotreinamentosalainformatica   situacaotreinamentosalainformatica     @relation(fields: [IdSituacaoTreinamentoSalaInformatica], references: [IdSituacaoTreinamentoSalaInformatica], onUpdate: Restrict, map: "FKProfessor49846")
+  situacaoprofessor                    situacaoprofessor                      @relation(fields: [IdSituacaoProfessor], references: [IdSituacaoProfessor], onUpdate: Restrict, map: "FKProfessor59")
+
+  @@index([IdSituacaoTreinamentoMultimidia], map: "FKProfessor133994")
+  @@index([IdSituacaoTreinamentoSalaInformatica], map: "FKProfessor49846")
+  @@index([IdSituacaoProfessor], map: "FKProfessor59")
+}
+
+model resolucaodatashow {
+  IdResolucao           Int        @id @default(autoincrement()) @db.TinyInt
+  ResolucaoMaximaNativa String     @db.VarChar(20)
+  datashow              datashow[]
+}
+
+model resolucaomonitor {
+  IdResolucao        Int       @id @default(autoincrement()) @db.TinyInt
+  DescricaoResolucao String    @db.VarChar(20)
+  monitor            monitor[]
+}
+
+model responsavelguia {
+  IdPessoa              Int
+  IdGuia                Int
+  HoraInicioAtendimento DateTime @db.DateTime(0)
+  pessoa                pessoa   @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKResponsave21417")
+  guia                  guia     @relation(fields: [IdGuia], references: [IdGuia], onUpdate: Restrict, map: "FKResponsave517807")
+
+  @@id([IdPessoa, IdGuia])
+  @@index([IdGuia], map: "FKResponsave517807")
+}
+
+model sala {
+  IdSala         Int          @id @default(autoincrement())
+  DescricaoSala  String       @db.VarChar(10)
+  IdBlocoSala    Int          @db.TinyInt
+  IdSituacaoSala Int          @db.TinyInt
+  IdTipoSala     Int          @db.TinyInt
+  ocorrencia     ocorrencia[]
+  tiposala       tiposala     @relation(fields: [IdTipoSala], references: [IdTipoSala], onUpdate: Restrict, map: "FKSala213085")
+  blocosala      blocosala    @relation(fields: [IdBlocoSala], references: [IdBlocoSala], onUpdate: Restrict, map: "FKSala39636")
+  situacaosala   situacaosala @relation(fields: [IdSituacaoSala], references: [IdSituacaoSala], onUpdate: Restrict, map: "FKSala646356")
+
+  @@index([IdTipoSala], map: "FKSala213085")
+  @@index([IdBlocoSala], map: "FKSala39636")
+  @@index([IdSituacaoSala], map: "FKSala646356")
+}
+
+model scanner {
+  IdEquipamento  Int              @id
+  IdTipoScanner  Int              @db.TinyInt
+  IdTamanhoPapel Int              @db.TinyInt
+  conexaoscanner conexaoscanner[]
+  tamanhopapel   tamanhopapel     @relation(fields: [IdTamanhoPapel], references: [IdTamanhoPapel], onUpdate: Restrict, map: "FKScanner353413")
+  tiposcanner    tiposcanner      @relation(fields: [IdTipoScanner], references: [IdTipoScanner], onUpdate: Restrict, map: "FKScanner657642")
+  equipamento    equipamento      @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKScanner950564")
+
+  @@index([IdTamanhoPapel], map: "FKScanner353413")
+  @@index([IdTipoScanner], map: "FKScanner657642")
+}
+
+model serieequipamento {
+  IdSerieEquipamento Int         @id @default(autoincrement())
+  IdEquipamento      Int
+  Serie              Int         @db.TinyInt
+  NumeroSequencial   Int
+  equipamento        equipamento @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKSerieEquip744704")
+
+  @@index([IdEquipamento], map: "FKSerieEquip744704")
+}
+
+model setorresponsavel {
+  IdSetorResponsavel   Int    @id @default(autoincrement()) @db.TinyInt
+  NomeSetorResponsavel String @db.VarChar(20)
+  guia                 guia[]
+}
+
+model sistemaoperacional {
+  IdSistemaOperacional        Int        @id @default(autoincrement()) @db.TinyInt
+  DescricaoSistemaOperacional String     @db.VarChar(10)
+  gabinete                    gabinete[]
+  notebook                    notebook[]
+}
+
+model situacaodepartamento {
+  IdSituacaoDepartamento        Int            @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoDepartamento String         @db.VarChar(10)
+  departamento                  departamento[]
+}
+
+model situacaoemprestimoequipamento {
+  IdSituacaoEmprestimoEquipamento Int                           @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoEmprestimo     String                        @db.VarChar(20)
+  pedidoemprestimoequipamento     pedidoemprestimoequipamento[]
+}
+
+model situacaoequipamento {
+  IdSituacaoEquipamento        Int           @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoEquipamento String        @db.VarChar(20)
+  equipamento                  equipamento[]
+}
+
+model situacaoguia {
+  IdSituacaoGuia    Int    @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacao String @db.VarChar(20)
+  guia              guia[]
+}
+
+model situacaoincidente {
+  IdSituacaoIncidente        Int                        @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoIncidente String                     @db.VarChar(20)
+  situacaoincidente_pessoa   situacaoincidente_pessoa[]
+}
+
+model situacaoincidente_pessoa {
+  IdIncidente         Int
+  IdSituacaoIncidente Int               @db.TinyInt
+  IdPessoa            Int
+  NomePessoa          String            @db.VarChar(150)
+  EmailPessoa         String?           @db.VarChar(150)
+  DescricaoIncidente  String            @db.VarChar(500)
+  DataCriacao         DateTime          @db.DateTime(0)
+  pessoa              pessoa            @relation(fields: [IdPessoa], references: [IdPessoa], onUpdate: Restrict, map: "FKSituacaoIn797509")
+  situacaoincidente   situacaoincidente @relation(fields: [IdSituacaoIncidente], references: [IdSituacaoIncidente], onUpdate: Restrict, map: "FKSituacaoIn939305")
+
+  @@id([IdIncidente, IdSituacaoIncidente])
+  @@index([IdPessoa], map: "FKSituacaoIn797509")
+  @@index([IdSituacaoIncidente], map: "FKSituacaoIn939305")
+}
+
+model situacaopessoa {
+  IdSituacaoPessoa        Int      @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoPessoa String   @db.VarChar(50)
+  pessoa                  pessoa[]
+}
+
+model situacaoprofessor {
+  IdSituacaoProfessor        Int         @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoProfessor String      @db.VarChar(20)
+  professor                  professor[]
+}
+
+model situacaosala {
+  IdSituacaoSala        Int    @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoSala String @db.VarChar(10)
+  sala                  sala[]
+}
+
+model situacaotreinamentomultimidia {
+  IdSituacaoTreinamentoMultimidia        Int         @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoTreinamentoMultimidia String      @db.VarChar(50)
+  professor                              professor[]
+}
+
+model situacaotreinamentosalainformatica {
+  IdSituacaoTreinamentoSalaInformatica        Int         @id @default(autoincrement()) @db.TinyInt
+  DescricaoSituacaoTreinamentoSalaInformatica String      @db.VarChar(50)
+  professor                                   professor[]
+}
+
+model slotplacamae {
+  IdSlotPlacaMae Int             @id @default(autoincrement())
+  DescricaoSlot  String          @db.VarChar(20)
+  slotsplacamae  slotsplacamae[]
+}
+
+model slotsplacamae {
+  IdSlotPlacaMae Int
+  IdPlacaMae     Int
+  QuantidadeSlot Int          @db.TinyInt
+  placamae       placamae     @relation(fields: [IdPlacaMae], references: [IdPlacaMae], onUpdate: Restrict, map: "FKSlotsPlaca696022")
+  slotplacamae   slotplacamae @relation(fields: [IdSlotPlacaMae], references: [IdSlotPlacaMae], onUpdate: Restrict, map: "FKSlotsPlaca886353")
+
+  @@id([IdSlotPlacaMae, IdPlacaMae])
+  @@index([IdPlacaMae], map: "FKSlotsPlaca696022")
+}
+
+model socketprocessador {
+  IdSocket         Int           @id @default(autoincrement()) @db.TinyInt
+  DescricaoSoquete String        @db.VarChar(10)
+  placamae         placamae[]
+  processador      processador[]
+}
+
+model tamanhomonitor {
+  IdTamanhoMonitor        Int       @id @default(autoincrement()) @db.TinyInt
+  DescricaoTamanhoMonitor String    @db.VarChar(20)
+  monitor                 monitor[]
+}
+
+model tamanhopapel {
+  IdTamanhoPapel        Int          @id @default(autoincrement()) @db.TinyInt
+  DescricaoTamanhoPapel String       @db.VarChar(20)
+  impressora            impressora[]
+  scanner               scanner[]
+}
+
+model tecnologiaimpressao {
+  IdTecnologiaImpressao        Int          @id @default(autoincrement()) @db.TinyInt
+  DescricaoTecnologiaImpressao String       @db.VarChar(20)
+  impressora                   impressora[]
+}
+
+model tipodepartamento {
+  IdTipoDepartamento Int            @id @default(autoincrement()) @db.TinyInt
+  TipoDepartamento   String         @db.VarChar(50)
+  departamento       departamento[]
+}
+
+model tipodisco {
+  IdTipoDisco        Int             @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoDisco String          @db.VarChar(20)
+  armazenamento      armazenamento[]
+}
+
+model tipodisplay {
+  IdTipoDisplay    Int       @id @default(autoincrement()) @db.TinyInt
+  DescricaoDisplay String    @db.VarChar(20)
+  monitor          monitor[]
+}
+
+model tipoequipamento {
+  IdTipoEquipamento        Int    @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoEquipamento String @db.VarChar(20)
+  guia                     guia[]
+}
+
+model tipoimpressao {
+  IdTipoImpressao        Int          @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoImpressao String       @db.VarChar(20)
+  impressora             impressora[]
+}
+
+model tipoimpressora {
+  IdTipoImpressora        Int          @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoImpressora String       @db.VarChar(20)
+  impressora              impressora[]
+}
+
+model tipolampada {
+  IdTipoLampada        Int            @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoLampada String         @db.VarChar(50)
+  datashow             datashow[]
+  marcalampada         marcalampada[]
+}
+
+model tipopessoa {
+  IdTipoPessoa        Int      @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoPessoa String   @db.VarChar(20)
+  pessoa              pessoa[]
+}
+
+model tiposala {
+  IdTipoSala        Int    @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoSala String @db.VarChar(20)
+  sala              sala[]
+}
+
+model tiposcanner {
+  IdTipoScanner        Int       @id @default(autoincrement()) @db.TinyInt
+  DescricaoTipoScanner String    @db.VarChar(20)
+  scanner              scanner[]
+}
+
+model trocalampada {
+  IdTrocaLampada   Int      @id @default(autoincrement())
+  DataTrocaLampada DateTime @db.Date
+  DescricaoReparo  String   @db.VarChar(500)
+  IdEquipamento    Int
+  datashow         datashow @relation(fields: [IdEquipamento], references: [IdEquipamento], onUpdate: Restrict, map: "FKTrocaLampa622616")
+
+  @@index([IdEquipamento], map: "FKTrocaLampa622616")
+}
