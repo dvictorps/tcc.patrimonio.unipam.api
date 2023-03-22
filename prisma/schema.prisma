@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:@localhost:3306/informatica"
+  url      = env("DATABASE_URL")
 }
 
 model agendatreinamentomultimidia {
@@ -691,11 +691,11 @@ model pedidoequipamento {
 model pessoa {
   IdPessoa                             Int                                    @id @default(autoincrement())
   Nome                                 String                                 @db.VarChar(150)
-  Email                                String                                 @db.VarChar(150)
-  Usuario                              String                                 @db.VarChar(20)
-  Senha                                String                                 @db.VarChar(32)
-  DataCriacao                          DateTime                               @db.DateTime(0)
-  DataModificacao                      DateTime?                              @db.DateTime(0)
+  Email                                String                                 @unique @db.VarChar(150)
+  Usuario                              String                                 @unique @db.VarChar(20)
+  Senha                                String                                 @db.VarChar(60)
+  DataCriacao                          DateTime?                              @default(now()) @db.DateTime(0)
+  DataModificacao                      DateTime?                              @updatedAt() @db.DateTime(0)
   IdTipoPessoa                         Int                                    @db.TinyInt
   IdSituacaoPessoa                     Int                                    @db.TinyInt
   agendatreinamentomultimidia          agendatreinamentomultimidia[]
