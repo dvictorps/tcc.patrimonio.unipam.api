@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Req, Res } from '@nestjs/common';
+import { Controller, Post, Get, Body, Req, Res, Param, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -21,5 +21,4 @@ export class AuthController {
   signout(@Req() req, @Res() res) {
     return this.authService.signout(req, res)
   }
-
 }
