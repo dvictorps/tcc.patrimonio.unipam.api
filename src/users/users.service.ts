@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ForbiddenException, NotFoundException } from '@nestjs/common/exceptions';
 import { Request } from 'express';
 import { PrismaService } from 'prisma/prisma.service';
+import { Role } from 'src/roles/roles.decorator';
 
 @Injectable()
 export class UsersService {

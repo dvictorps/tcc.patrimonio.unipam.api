@@ -50,9 +50,11 @@ export class AuthService {
 
         const checkUser = await this.prisma.pessoa.findUnique({ where: { Usuario: Usuario } });
 
+        if (!checkUser) throw new BadRequestException('Credenciais incorretas');
+
         const checkPassword = await this.comparePasswords({ password: Senha, hash: checkUser.Senha })
 
-        if (!checkPassword || !checkUser) throw new BadRequestException('Credenciais incorretas');
+        if (!checkPassword) throw new BadRequestException('Credenciais incorretas');
 
         const token = await this.signToken({ id: checkUser.IdPessoa, user: checkUser.Usuario, role: checkUser.IdTipoPessoa })
 

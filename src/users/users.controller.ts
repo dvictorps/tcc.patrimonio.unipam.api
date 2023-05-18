@@ -1,22 +1,23 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { RolesGuard } from 'src/roles/roles.guard';
 import { UsersService } from './users.service';
-import { ForbiddenException } from '@nestjs/common';
+import { Roles, Role } from 'src/roles/roles.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
-  @UseGuards(JwtAuthGuard)
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Protected)
   @Get(':id')
-  getMyUser(@Param() params: { id: string }, @Req() req) {
-    const decodedUser = req.user as { id: number, user: string, role: number }
-    if (decodedUser.role !== 1) throw new ForbiddenException()
-    return this.usersService.getMyUser(params.id)
+  getMyUser(@Param('id') id: string) {
+    return this.usersService.getMyUser(id);
   }
 
   @Get()
   getUsers() {
-    return this.usersService.getUsers()
+    return this.usersService.getUsers();
   }
 }

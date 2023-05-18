@@ -6,4 +6,4 @@ import { DeleteController } from './delete.controller';
   controllers: [DeleteController],
   providers: [DeleteService]
 })
-export class DeleteModule {}
+export class DeleteModule { }

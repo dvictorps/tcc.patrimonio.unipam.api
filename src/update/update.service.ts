@@ -10,11 +10,9 @@ import { Role } from '../roles/roles.decorator';
 
 @Injectable()
 export class UpdateService {
-    constructor(private prisma: PrismaService, private jwt: JwtService) { }
+    constructor(private prisma: PrismaService) { }
 
-    async updateUser(dto: UpdateUserDto, id: string, req: Request) {
-
-        const decodedUser = req.user as { id: number, user: string, role: number }
+    async updateUser(dto: UpdateUserDto, id: string) {
 
         if (Object.keys(dto).length === 0) {
             throw new BadRequestException('O corpo da requisição não pode estar vazio');
@@ -22,15 +20,14 @@ export class UpdateService {
 
         const { Email, Senha, IdSituacaoPessoa, IdTipoPessoa, Usuario, Nome } = dto;
 
+        const [findUser, checkUser] = await Promise.all([
+            this.prisma.pessoa.findFirst({ where: { IdPessoa: parseInt(id) }, select: { Usuario: true } }),
+            this.prisma.pessoa.findFirst({ where: { Usuario: Usuario }, select: { IdPessoa: true } })
+        ]);
 
-        if (decodedUser.role !== Role.Admin) { if (decodedUser.id !== parseInt(id)) throw new ForbiddenException() }
+        if (checkUser) throw new BadRequestException('o usuário que você quer colocar já existe')
 
-
-        const findUser = await this.prisma.pessoa.findUnique({ where: { IdPessoa: parseInt(id) } })
-
-        if (!findUser) {
-            throw new BadRequestException('O usuário a ser editado não existe')
-        }
+        if (!findUser) throw new BadRequestException('O usuário a ser editado não existe')
 
         const situacaoPessoa = IdSituacaoPessoa ? await this.prisma.situacaopessoa.findUnique({ where: { IdSituacaoPessoa: IdSituacaoPessoa } }) : undefined;
         const tipoPessoa = IdTipoPessoa ? await this.prisma.tipopessoa.findUnique({ where: { IdTipoPessoa: IdTipoPessoa } }) : undefined;

@@ -2,9 +2,12 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { jwtStrategy } from 'src/auth/jwt.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from 'src/roles/roles.guard';
+
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, jwtStrategy]
+  providers: [UsersService]
 })
 export class UsersModule { }
