@@ -315,6 +315,8 @@ CREATE TABLE `equipamento` (
     `IdFabricante` INTEGER NOT NULL,
     `IdDepartamento` INTEGER NOT NULL,
 
+    UNIQUE INDEX `equipamento_Patrimonio_key`(`Patrimonio`),
+    UNIQUE INDEX `equipamento_NumeroSerial_key`(`NumeroSerial`),
     INDEX `FKEquipament269`(`IdCategoriaEquipamento`),
     INDEX `FKEquipament29013`(`IdFabricante`),
     INDEX `FKEquipament310433`(`IdSituacaoEquipamento`),
