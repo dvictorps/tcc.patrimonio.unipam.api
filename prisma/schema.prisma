@@ -319,7 +319,7 @@ model equipamento {
   NumeroSerial           String                  @unique @db.VarChar(30)
   DataAquisicao          DateTime                @db.Date
   VencimentoGarantia     DateTime                @db.Date
-  DataCadastro           DateTime                @db.DateTime(0)
+  DataCadastro           DateTime?               @default(now()) @db.DateTime(0)
   DataModificacao        DateTime?               @db.DateTime(0)
   IdEmpresa              Int
   IdCategoriaEquipamento Int
