@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `equipamento` MODIFY `DataCadastro` DATETIME(0) NULL DEFAULT CURRENT_TIMESTAMP(0);
