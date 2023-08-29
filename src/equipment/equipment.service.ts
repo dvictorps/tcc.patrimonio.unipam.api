@@ -61,6 +61,7 @@ export class EquipmentService {
 
     async getEquipments() {
         return await this.prisma.equipamento.findMany({
+            take: 10,
             select: {
                 IdEquipamento: true,
                 Patrimonio: true,

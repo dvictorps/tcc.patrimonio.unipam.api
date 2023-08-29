@@ -77,13 +77,13 @@ model blocosala {
 
 model categoriaequipamento {
   IdCategoriaEquipamento        Int           @id @default(autoincrement())
-  DescricaoCategoriaEquipamento String        @db.VarChar(20)
+  DescricaoCategoriaEquipamento String        @unique @db.VarChar(20)
   equipamento                   equipamento[]
 }
 
 model cidade {
   IdCidade   Int       @id @default(autoincrement())
-  NomeCidade String    @db.VarChar(150)
+  NomeCidade String    @unique @db.VarChar(150)
   IdEstado   Int       @db.TinyInt
   estado     estado    @relation(fields: [IdEstado], references: [IdEstado], onUpdate: Restrict, map: "FKCidade86950")
   empresa    empresa[]
