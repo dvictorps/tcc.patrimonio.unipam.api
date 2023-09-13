@@ -35,10 +35,10 @@ export class EquipmentDto {
     public IdDepartamento: number
 
     @IsNotEmpty()
-    @IsDate()
+    @IsString()
     public DataAquisicao: Date
 
     @IsNotEmpty()
-    @IsDate()
+    @IsString()
     public VencimentoGarantia: Date
 }   

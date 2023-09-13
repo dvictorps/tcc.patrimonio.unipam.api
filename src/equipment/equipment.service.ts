@@ -59,22 +59,26 @@ export class EquipmentService {
 
     }
 
-    async getEquipments() {
+    async getEquipments(
+        skipValue: number,
+        takeValue: number,
+        searchPatrimValue: string,
+        searchDescValue: string,
+        searchSerialValue: string
+    ) {
         return await this.prisma.equipamento.findMany({
-            take: 10,
-            select: {
-                IdEquipamento: true,
-                Patrimonio: true,
-                NumeroSerial: true,
-                categoriaequipamento: true,
-                DescricaoEquipamento: true,
-                empresa: true,
-                fabricante: true,
-                DataCadastro: true,
-                DataAquisicao: true,
-                DataModificacao: true,
-                VencimentoGarantia: true,
-                situacaoequipamento: true
+            take: takeValue,
+            skip: skipValue,
+            where: {
+                Patrimonio: {
+                    contains: searchPatrimValue
+                },
+                DescricaoEquipamento: {
+                    contains: searchDescValue,
+                },
+                NumeroSerial: {
+                    contains: searchSerialValue
+                }
             }
         })
     }
