@@ -7,9 +7,12 @@ import { EquipmentModule } from './equipment/equipment.module';
 import { CategoryModule } from './category/category.module';
 import { CityModule } from './city/city.module';
 import { BlockModule } from './block/block.module';
+import { SituationModule } from './situation/situation.module';
+import { DepTypeModule } from './depType/depType.module';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, UsersModule, EquipmentModule, CategoryModule, CityModule, BlockModule],
+  imports: [AuthModule, PrismaModule, UsersModule, EquipmentModule, CategoryModule, CityModule, BlockModule, SituationModule, DepTypeModule, DepartmentModule],
   providers: [jwtStrategy]
 })
 export class AppModule { }

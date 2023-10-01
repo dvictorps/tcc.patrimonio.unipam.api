@@ -1,10 +1,10 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class BlockDto {
+export class DepartamentDto {
 
     @IsNotEmpty()
     @IsString()
-    public DescricaoBlocoDepartamento: string;
+    public TipoDepartamento: string;
 
 
 }   

@@ -1,47 +1,47 @@
 import { Controller, Post, Get, Body, Req, Res, Param, UseGuards, Patch, Delete } from '@nestjs/common';
-import { BlockDto } from './dto/depType.dto';
+import { DepartamentDto } from './dto/depType.dto';
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { BlockService } from './depType.service';
+import { DepTypeService } from './depType.service';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Role, Roles } from 'src/roles/roles.decorator';
 
-@Controller('block')
-export class BlockController {
-    constructor(private readonly blockService: BlockService) { }
+@Controller('depType')
+export class DepTypeController {
+    constructor(private readonly depTypeService: DepTypeService) { }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Post('register')
-    registerBlock(@Body() dto: BlockDto) {
-        return this.blockService.registerBlock(dto)
+    registerDepType(@Body() dto: DepartamentDto) {
+        return this.depTypeService.registerDepType(dto)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Get()
-    getBlocks() {
-        return this.blockService.getBlocks()
+    getDepTypes() {
+        return this.depTypeService.getDepTypes()
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Get(':id')
-    getBlock(@Param('id') id: string) {
-        return this.blockService.getBlock(id)
+    getDepType(@Param('id') id: string) {
+        return this.depTypeService.getDepType(id)
     }
 
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Delete('delete/:id')
-    deleteBlock(@Param('id') id: string) {
-        return this.blockService.deleteBlock(id)
+    deleteDepType(@Param('id') id: string) {
+        return this.depTypeService.deleteDepType(id)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Patch('update/:id')
-    updateBlock(@Body() dto: BlockDto, @Param() params: { id: string }) {
-        return this.blockService.updateBlock(dto, params.id)
+    updateDepType(@Body() dto: DepartamentDto, @Param() params: { id: string }) {
+        return this.depTypeService.updateDepType(dto, params.id)
     }
 }
