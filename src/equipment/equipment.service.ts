@@ -167,21 +167,22 @@ export class EquipmentService {
 
         const query = {
             take: takeValue,
+            skip: skipValue,
             where: where,
         }
 
-        if (skipValue) {
-            query['orderBy'] = {
-                IdEquipamento: 'asc'
-            }
-            query['cursor'] = {
-                IdEquipamento: skipValue
-            }
-        }
+        // if (skipValue) {
+        //     query['orderBy'] = {
+        //         IdEquipamento: 'asc'
+        //     }
+        //     query['cursor'] = {
+        //         IdEquipamento: skipValue
+        //     }
+        // }
 
-        if (skipValue > 0) {
-            query['skip'] = 1
-        }
+        // if (skipValue > 0) {
+        //     query['skip'] = 1
+        // }
 
         const data = await this.prisma.equipamento.findMany(query);
         const pageCount = await this.prisma.equipamento.count();
