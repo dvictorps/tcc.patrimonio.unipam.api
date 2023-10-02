@@ -50,6 +50,7 @@ export class DepartmentService {
     async getDepartments() {
         return await this.prisma.departamento.findMany({
             select: {
+                IdDepartamento: true,
                 NomeDepartamento: true,
                 IdBlocoDepartamento: true,
                 IdTipoDepartamento: true,

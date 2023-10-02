@@ -64,23 +64,129 @@ export class EquipmentService {
         takeValue: number,
         searchPatrimValue: string,
         searchDescValue: string,
-        searchSerialValue: string
+        searchSerialValue: string,
+        companyValue: string,
+        categoryValue: string,
+        situationValue: string,
+        manufacturerValue: string,
+        departmentValue: string
+
+
     ) {
-        return await this.prisma.equipamento.findMany({
-            take: takeValue,
-            skip: skipValue,
-            where: {
-                Patrimonio: {
-                    contains: searchPatrimValue
-                },
-                DescricaoEquipamento: {
-                    contains: searchDescValue,
-                },
-                NumeroSerial: {
-                    contains: searchSerialValue
-                }
+
+        const where = {
+            Patrimonio: {
+                contains: searchPatrimValue
+            },
+            DescricaoEquipamento: {
+                contains: searchDescValue,
+            },
+            NumeroSerial: {
+                contains: searchSerialValue
+            },
+        }
+
+        // if (companyValue) {
+        //     where['IdEmpresa'] = {
+        //         equals: parseInt(companyValue)
+        //     }
+        // };
+
+        // if (categoryValue) {
+        //     where['IdCategoriaEquipamento'] = {
+        //         equals: parseInt(categoryValue)
+        //     }
+        // };
+
+        // if (situationValue) {
+        //     where['IdSituacaoEquipamento'] = {
+        //         equals: parseInt(situationValue)
+        //     }
+        // };
+
+        // if (manufacturerValue) {
+        //     where['IdFabricante'] = {
+        //         equals: parseInt(manufacturerValue)
+        //     }
+        // };
+
+        // if (departmentValue) {
+        //     where['IdEmpresa'] = {
+        //         equals: parseInt(departmentValue)
+        //     }
+        // };
+
+
+        // return await this.prisma.equipamento.findMany({
+        //     // take: takeValue,
+        //     // skip: skipValue,
+        //     where: where
+        // })
+
+        // const where = {
+        //     Patrimonio: {
+        //         contains: searchPatrimValue
+        //     },
+        //     DescricaoEquipamento: {
+        //         contains: searchDescValue,
+        //     },
+        //     NumeroSerial: {
+        //         contains: searchSerialValue
+        //     },
+        // }
+
+        if (companyValue) {
+            where['IdEmpresa'] = {
+                equals: parseInt(companyValue)
             }
-        })
+        };
+
+        if (categoryValue) {
+            where['IdCategoriaEquipamento'] = {
+                equals: parseInt(categoryValue)
+            }
+        };
+
+        if (situationValue) {
+            where['IdSituacaoEquipamento'] = {
+                equals: parseInt(situationValue)
+            }
+        };
+
+        if (manufacturerValue) {
+            where['IdFabricante'] = {
+                equals: parseInt(manufacturerValue)
+            }
+        };
+
+        if (departmentValue) {
+            where['IdDepartamento'] = {
+                equals: parseInt(departmentValue)
+            }
+        };
+
+        const query = {
+            take: takeValue,
+            where: where,
+        }
+
+        if (skipValue) {
+            query['orderBy'] = {
+                IdEquipamento: 'asc'
+            }
+            query['cursor'] = {
+                IdEquipamento: skipValue
+            }
+        }
+
+        if (skipValue > 0) {
+            query['skip'] = 1
+        }
+
+        const data = await this.prisma.equipamento.findMany(query);
+        const pageCount = await this.prisma.equipamento.count();
+
+        return { pageCount, data };
     }
 
     async getEquipment(id: string) {
@@ -103,6 +209,22 @@ export class EquipmentService {
 
         return { message: 'Equipamento excluido com suceesso' }
     }
+
+
+    async deleteEquipments(equipments: string[]) {
+
+        for (const equipment of equipments) {
+
+            const findEquipment = await this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(equipment) } })
+            if (!findEquipment) throw new NotFoundException;
+
+            await this.prisma.equipamento.delete({ where: { IdEquipamento: parseInt(equipment) } });
+
+        }
+
+        return { message: 'Itens excluídos com sucesso' };
+    }
+
 
     async updateEquipment(dto: EquipmentUpdateDto, id: string) {
 

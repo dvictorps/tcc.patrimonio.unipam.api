@@ -10,9 +10,11 @@ import { BlockModule } from './block/block.module';
 import { SituationModule } from './situation/situation.module';
 import { DepTypeModule } from './depType/depType.module';
 import { DepartmentModule } from './department/department.module';
+import { ManufacturerModule } from './manufacturer/manufacturer.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, UsersModule, EquipmentModule, CategoryModule, CityModule, BlockModule, SituationModule, DepTypeModule, DepartmentModule],
+  imports: [AuthModule, PrismaModule, UsersModule, EquipmentModule, CategoryModule, CityModule, BlockModule, SituationModule, DepTypeModule, DepartmentModule, ManufacturerModule, CompanyModule],
   providers: [jwtStrategy]
 })
 export class AppModule { }

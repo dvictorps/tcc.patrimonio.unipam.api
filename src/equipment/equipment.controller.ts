@@ -25,7 +25,12 @@ export class EquipmentController {
         @Query('take') take: string,
         @Query('searchPatrim') searchPatrim: string,
         @Query('searchDesc') searchDesc: string,
-        @Query('searchSerial') searchSerial: string
+        @Query('searchSerial') searchSerial: string,
+        @Query('company') company: string,
+        @Query('category') category: string,
+        @Query('situation') situation: string,
+        @Query('manufacturer') manufacturer: string,
+        @Query('department') department: string
     ) {
 
         const skipValue = skip ? parseInt(skip, 10) : 0;
@@ -33,8 +38,14 @@ export class EquipmentController {
         const searchPatrimValue = searchPatrim ? searchPatrim : undefined;
         const searchDescValue = searchDesc ? searchDesc : undefined;
         const searchSerialValue = searchSerial ? searchSerial : undefined;
+        const companyValue = company ? company : undefined;
+        const categoryValue = category ? category : undefined;
+        const situationValue = situation ? situation : undefined;
+        const manufacturerValue = manufacturer ? manufacturer : undefined;
+        const departmentValue = department ? department : undefined;
 
-        return this.equipmentService.getEquipments(skipValue, takeValue, searchPatrimValue, searchDescValue, searchSerialValue)
+        return this.equipmentService.getEquipments(skipValue, takeValue, searchPatrimValue, searchDescValue, searchSerialValue,
+            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -50,6 +61,14 @@ export class EquipmentController {
     deleteEquipment(@Param('id') id: string) {
         return this.equipmentService.deleteEquipment(id)
     }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Protected)
+    @Delete('delete')
+    deleteEquipments(@Query('equipments') equipments: string[],) {
+        return this.equipmentService.deleteEquipments(equipments)
+    }
+
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
