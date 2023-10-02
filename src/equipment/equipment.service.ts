@@ -185,9 +185,9 @@ export class EquipmentService {
         // }
 
         const data = await this.prisma.equipamento.findMany(query);
-        const pageCount = await this.prisma.equipamento.count();
+        const totalRecords = await this.prisma.equipamento.count();
 
-        return { pageCount, data };
+        return { totalRecords, data };
     }
 
     async getEquipment(id: string) {
