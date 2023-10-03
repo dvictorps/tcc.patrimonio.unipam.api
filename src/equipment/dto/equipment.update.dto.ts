@@ -35,10 +35,8 @@ export class EquipmentUpdateDto {
     public IdDepartamento: number
 
     @IsOptional()
-    @IsDate()
     public DataAquisicao: Date
 
     @IsOptional()
-    @IsDate()
     public VencimentoGarantia: Date
 }   

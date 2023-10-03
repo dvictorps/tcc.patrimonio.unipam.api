@@ -51,6 +51,7 @@ export class EquipmentService {
                 situacaoequipamento: { connect: { IdSituacaoEquipamento: IdSituacaoEquipamento } },
                 fabricante: { connect: { IdFabricante: IdFabricante } },
                 departamento: { connect: { IdDepartamento: IdDepartamento } },
+                DataModificacao: new Date()
             }
         })
 
@@ -194,7 +195,7 @@ export class EquipmentService {
         const findEquipment = await this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(id) } })
         if (!findEquipment) throw new NotFoundException;
 
-        return { findEquipment };
+        return findEquipment;
     }
 
     async deleteEquipment(id: string) {
