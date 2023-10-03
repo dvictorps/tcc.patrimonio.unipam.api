@@ -15,7 +15,7 @@ export class DepTypeService {
 
         const { TipoDepartamento } = dto;
 
-        const checkDepType = await this.prisma.tipodepartamento.findFirst({ where: { TipoDepartamento: TipoDepartamento } });
+        const checkDepType = await this.prisma.tipodepartamento.findUnique({ where: { TipoDepartamento: TipoDepartamento } });
 
         if (checkDepType) throw new BadRequestException('O tipo de departamento que você quer cadastrar já existe')
 
@@ -74,7 +74,7 @@ export class DepTypeService {
 
         const [findDepType, checkDepType] = await Promise.all([
             this.prisma.tipodepartamento.findUnique({ where: { IdTipoDepartamento: parseInt(id) } }),
-            this.prisma.tipodepartamento.findFirst({ where: { TipoDepartamento: TipoDepartamento } })
+            this.prisma.tipodepartamento.findUnique({ where: { TipoDepartamento: TipoDepartamento } })
         ])
 
         if (!findDepType) throw new NotFoundException('O tipo de departamento que você quer editar não existe')

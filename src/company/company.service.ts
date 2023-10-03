@@ -23,7 +23,7 @@ export class CompanyService {
 
         const [findCidade, checkNome] = await Promise.all([
             this.prisma.cidade.findUnique({ where: { IdCidade: IdCidade } }),
-            this.prisma.empresa.findFirst({ where: { NomeEmpresa: NomeEmpresa } }),
+            this.prisma.empresa.findUnique({ where: { NomeEmpresa: NomeEmpresa } }),
         ]);
 
         if (!findCidade) throw new BadRequestException('A cidade da empresa selecionada não existe no sistema')
@@ -89,7 +89,7 @@ export class CompanyService {
 
         const [findCidade, checkNome] = await Promise.all([
             IdCidade ? this.prisma.cidade.findUnique({ where: { IdCidade: IdCidade } }) : Promise.resolve(undefined),
-            NomeEmpresa ? this.prisma.empresa.findFirst({ where: { NomeEmpresa: NomeEmpresa } }) : Promise.resolve(undefined),
+            NomeEmpresa ? this.prisma.empresa.findUnique({ where: { NomeEmpresa: NomeEmpresa } }) : Promise.resolve(undefined),
         ]);
 
         if (!findCidade) throw new BadRequestException('A cidade selecionada não existe')

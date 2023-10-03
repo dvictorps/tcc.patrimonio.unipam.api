@@ -1,12 +1,12 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { AuthDto, RegisterDto } from '../auth/dto'
+import { AuthDto, RegisterDto } from '../../auth/dto'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
-import { jwtSecret } from '../utils/constants'
+import { jwtSecret } from '../../utils/constants'
 import { Request, Response } from 'express'
 import { EquipmentDto } from './dto/equipment.dto';
-import { Role } from '../roles/roles.decorator';
+import { Role } from '../../roles/roles.decorator';
 import { EquipmentUpdateDto } from './dto/equipment.update.dto';
 
 @Injectable()

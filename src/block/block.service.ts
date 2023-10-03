@@ -15,7 +15,7 @@ export class BlockService {
 
         const { DescricaoBlocoDepartamento } = dto;
 
-        const checkBlock = await this.prisma.blocodepartamento.findFirst({ where: { DescricaoBlocoDepartamento: DescricaoBlocoDepartamento } });
+        const checkBlock = await this.prisma.blocodepartamento.findUnique({ where: { DescricaoBlocoDepartamento: DescricaoBlocoDepartamento } });
 
         if (checkBlock) throw new BadRequestException('O bloco que você quer cadastrar já existe')
 
@@ -75,7 +75,7 @@ export class BlockService {
 
         const [findBlock, checkBlock] = await Promise.all([
             this.prisma.blocodepartamento.findUnique({ where: { IdBlocoDepartamento: parseInt(id) } }),
-            this.prisma.blocodepartamento.findFirst({ where: { DescricaoBlocoDepartamento: DescricaoBlocoDepartamento } })
+            this.prisma.blocodepartamento.findUnique({ where: { DescricaoBlocoDepartamento: DescricaoBlocoDepartamento } })
         ])
 
         if (!findBlock) throw new NotFoundException('O bloco que você quer editar não existe')

@@ -65,7 +65,7 @@ model armazenamento {
 
 model blocodepartamento {
   IdBlocoDepartamento        Int            @id @default(autoincrement()) @db.TinyInt
-  DescricaoBlocoDepartamento String         @db.VarChar(20)
+  DescricaoBlocoDepartamento String         @unique @db.VarChar(20)
   departamento               departamento[]
   sala                       sala[]
 }
@@ -245,7 +245,7 @@ model datashow {
 
 model departamento {
   IdDepartamento         Int                    @id @default(autoincrement())
-  NomeDepartamento       String                 @db.VarChar(150)
+  NomeDepartamento       String                 @unique @db.VarChar(150)
   IdSituacaoDepartamento Int                    @db.TinyInt
   IdBlocoDepartamento    Int                    @db.TinyInt
   IdTipoDepartamento     Int                    @db.TinyInt
@@ -264,7 +264,7 @@ model departamento {
 
 model empresa {
   IdEmpresa         Int           @id @default(autoincrement())
-  NomeEmpresa       String        @db.VarChar(150)
+  NomeEmpresa       String        @unique @db.VarChar(150)
   NomeRepresentante String?       @db.VarChar(100)
   SiteEmpresa       String?       @db.VarChar(150)
   EmailEmpresa      String?       @db.VarChar(150)
@@ -375,7 +375,7 @@ model estado {
 
 model fabricante {
   IdFabricante   Int           @id @default(autoincrement())
-  NomeFabricante String        @db.VarChar(100)
+  NomeFabricante String        @unique @db.VarChar(100)
   equipamento    equipamento[]
   modelo         modelo[]
 }
@@ -861,7 +861,7 @@ model situacaoemprestimoequipamento {
 
 model situacaoequipamento {
   IdSituacaoEquipamento        Int           @id @default(autoincrement()) @db.TinyInt
-  DescricaoSituacaoEquipamento String        @db.VarChar(20)
+  DescricaoSituacaoEquipamento String        @unique @db.VarChar(20)
   equipamento                  equipamento[]
 }
 
@@ -907,7 +907,7 @@ model situacaoprofessor {
 
 model situacaosala {
   IdSituacaoSala        Int    @id @default(autoincrement()) @db.TinyInt
-  DescricaoSituacaoSala String @db.VarChar(10)
+  DescricaoSituacaoSala String @unique @db.VarChar(10)
   sala                  sala[]
 }
 
@@ -968,7 +968,7 @@ model tecnologiaimpressao {
 
 model tipodepartamento {
   IdTipoDepartamento Int            @id @default(autoincrement()) @db.TinyInt
-  TipoDepartamento   String         @db.VarChar(50)
+  TipoDepartamento   String         @unique @db.VarChar(50)
   departamento       departamento[]
 }
 
@@ -1017,7 +1017,7 @@ model tipopessoa {
 
 model tiposala {
   IdTipoSala        Int    @id @default(autoincrement()) @db.TinyInt
-  DescricaoTipoSala String @db.VarChar(20)
+  DescricaoTipoSala String @unique @db.VarChar(20)
   sala              sala[]
 }
 

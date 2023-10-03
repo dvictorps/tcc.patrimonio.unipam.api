@@ -3,10 +3,12 @@ import { IsEmail, IsNotEmpty, IsNumber, IsString, Length, IsOptional, isNotEmpty
 export class CityUpdateDto {
 
     @IsOptional()
+    @IsNotEmpty()
     @IsString()
     public NomeCidade: string;
 
     @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public IdEstado: number
 

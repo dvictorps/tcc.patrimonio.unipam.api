@@ -15,7 +15,7 @@ export class SituationService {
 
         const { DescricaoSituacaoEquipamento } = dto;
 
-        const checkSituation = await this.prisma.situacaoequipamento.findFirst({ where: { DescricaoSituacaoEquipamento: DescricaoSituacaoEquipamento } });
+        const checkSituation = await this.prisma.situacaoequipamento.findUnique({ where: { DescricaoSituacaoEquipamento: DescricaoSituacaoEquipamento } });
 
         if (checkSituation) throw new BadRequestException('A situacao que você quer cadastrar já existe')
 
@@ -74,7 +74,7 @@ export class SituationService {
 
         const [findSituation, checkSituation] = await Promise.all([
             this.prisma.situacaoequipamento.findUnique({ where: { IdSituacaoEquipamento: parseInt(id) } }),
-            this.prisma.situacaoequipamento.findFirst({ where: { DescricaoSituacaoEquipamento: DescricaoSituacaoEquipamento } })
+            this.prisma.situacaoequipamento.findUnique({ where: { DescricaoSituacaoEquipamento: DescricaoSituacaoEquipamento } })
         ])
 
         if (!findSituation) throw new NotFoundException('A categoria que você quer editar não existe')

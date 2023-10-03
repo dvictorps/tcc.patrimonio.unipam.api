@@ -17,7 +17,7 @@ export class CityService {
         const { NomeCidade, IdEstado } = dto;
 
         const [checkCity, checkState] = await Promise.all([
-            this.prisma.cidade.findFirst({ where: { NomeCidade: NomeCidade } }),
+            this.prisma.cidade.findUnique({ where: { NomeCidade: NomeCidade } }),
             this.prisma.estado.findUnique({ where: { IdEstado: IdEstado } })
         ])
 
@@ -81,7 +81,7 @@ export class CityService {
 
         const [checkCityExistance, checkCityName, checkState] = await Promise.all([
             this.prisma.cidade.findUnique({ where: { IdCidade: parseInt(id) } }),
-            NomeCidade ? this.prisma.cidade.findFirst({ where: { NomeCidade: NomeCidade } }) : Promise.resolve(undefined),
+            NomeCidade ? this.prisma.cidade.findUnique({ where: { NomeCidade: NomeCidade } }) : Promise.resolve(undefined),
             IdEstado ? this.prisma.estado.findUnique({ where: { IdEstado: IdEstado } }) : Promise.resolve(undefined),
         ])
 

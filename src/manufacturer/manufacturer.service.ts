@@ -15,7 +15,7 @@ export class ManufacturerService {
 
         const { NomeFabricante } = dto;
 
-        const checkManufacturer = await this.prisma.fabricante.findFirst({ where: { NomeFabricante: NomeFabricante } });
+        const checkManufacturer = await this.prisma.fabricante.findUnique({ where: { NomeFabricante: NomeFabricante } });
 
         if (checkManufacturer) throw new BadRequestException('A situacao que você quer cadastrar já existe')
 
@@ -74,7 +74,7 @@ export class ManufacturerService {
 
         const [findManufacturer, checkManufacturer] = await Promise.all([
             this.prisma.fabricante.findUnique({ where: { IdFabricante: parseInt(id) } }),
-            this.prisma.fabricante.findFirst({ where: { NomeFabricante: NomeFabricante } })
+            this.prisma.fabricante.findUnique({ where: { NomeFabricante: NomeFabricante } })
         ])
 
         if (!findManufacturer) throw new NotFoundException('A fabricante que você quer editar não existe')

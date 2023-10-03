@@ -1,11 +1,11 @@
 import { Controller, Post, Get, Body, Req, Res, Param, UseGuards, Patch, Delete } from '@nestjs/common';
 import { SituationDto } from './dto/situation.dto';
-import { JwtAuthGuard } from '../auth/jwt.guard';
+import { JwtAuthGuard } from '../../auth/jwt.guard';
 import { SituationService } from './situation.service';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Role, Roles } from 'src/roles/roles.decorator';
 
-@Controller('situation')
+@Controller('equipmentSituation')
 export class SituationController {
     constructor(private readonly situationService: SituationService) { }
 

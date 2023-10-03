@@ -15,7 +15,7 @@ export class CategoryService {
 
         const { DescricaoCategoriaEquipamento } = dto;
 
-        const checkCategory = await this.prisma.categoriaequipamento.findFirst({ where: { DescricaoCategoriaEquipamento: DescricaoCategoriaEquipamento } });
+        const checkCategory = await this.prisma.categoriaequipamento.findUnique({ where: { DescricaoCategoriaEquipamento: DescricaoCategoriaEquipamento } });
 
         if (checkCategory) throw new BadRequestException('A categoria que você quer cadastrar já existe')
 
@@ -74,7 +74,7 @@ export class CategoryService {
 
         const [findCategory, checkCategory] = await Promise.all([
             this.prisma.categoriaequipamento.findUnique({ where: { IdCategoriaEquipamento: parseInt(id) } }),
-            this.prisma.categoriaequipamento.findFirst({ where: { DescricaoCategoriaEquipamento: DescricaoCategoriaEquipamento } })
+            this.prisma.categoriaequipamento.findUnique({ where: { DescricaoCategoriaEquipamento: DescricaoCategoriaEquipamento } })
         ])
 
         if (!findCategory) throw new NotFoundException('A categoria que você quer editar não existe')

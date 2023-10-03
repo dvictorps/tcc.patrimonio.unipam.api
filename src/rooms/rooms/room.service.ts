@@ -1,13 +1,13 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { AuthDto, RegisterDto } from '../auth/dto'
+import { AuthDto, RegisterDto } from '../../auth/dto'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
-import { jwtSecret } from '../utils/constants'
+import { jwtSecret } from '../../utils/constants'
 import { Request, Response } from 'express'
-import { DepartmentDto } from './dto/department.dto';
-import { Role } from '../roles/roles.decorator';
-import { DepartmentUpdateDto } from './dto/department.update.dto';
+import { DepartmentDto } from './dto/room.dto';
+import { Role } from '../../roles/roles.decorator';
+import { DepartmentUpdateDto } from './dto/room.update.dto';
 
 @Injectable()
 export class DepartmentService {
@@ -25,7 +25,7 @@ export class DepartmentService {
             this.prisma.blocodepartamento.findUnique({ where: { IdBlocoDepartamento: IdBlocoDepartamento } }),
             this.prisma.situacaodepartamento.findUnique({ where: { IdSituacaoDepartamento: IdSituacaoDepartamento } }),
             this.prisma.tipodepartamento.findUnique({ where: { IdTipoDepartamento: IdTipoDepartamento } }),
-            this.prisma.departamento.findFirst({ where: { NomeDepartamento: NomeDepartamento } }),
+            this.prisma.departamento.findUnique({ where: { NomeDepartamento: NomeDepartamento } }),
         ]);
 
         if (!findBloco) throw new BadRequestException('O bloco que você está tentando adicionar não existe')
@@ -92,7 +92,7 @@ export class DepartmentService {
             IdBlocoDepartamento ? this.prisma.blocodepartamento.findUnique({ where: { IdBlocoDepartamento: IdBlocoDepartamento } }) : Promise.resolve(undefined),
             IdSituacaoDepartamento ? this.prisma.situacaodepartamento.findUnique({ where: { IdSituacaoDepartamento: IdSituacaoDepartamento } }) : Promise.resolve(undefined),
             IdTipoDepartamento ? this.prisma.tipodepartamento.findUnique({ where: { IdTipoDepartamento: IdTipoDepartamento } }) : Promise.resolve(undefined),
-            NomeDepartamento ? this.prisma.departamento.findFirst({ where: { NomeDepartamento: NomeDepartamento } }) : Promise.resolve(undefined),
+            NomeDepartamento ? this.prisma.departamento.findUnique({ where: { NomeDepartamento: NomeDepartamento } }) : Promise.resolve(undefined),
         ]);
         if (!findBloco) throw new BadRequestException('O bloco que você está tentando adicionar não existe')
         if (!findTipo) throw new BadRequestException('O tipo de departamento que você está tentando aplicar não existe')
