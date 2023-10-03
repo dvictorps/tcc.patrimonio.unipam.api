@@ -64,7 +64,7 @@ export class DepartmentService {
         const findDepartment = await this.prisma.departamento.findUnique({ where: { IdDepartamento: parseInt(id) } })
         if (!findDepartment) throw new NotFoundException;
 
-        return { findDepartment };
+        return findDepartment;
     }
 
     async deleteDepartment(id: string) {

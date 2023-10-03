@@ -44,7 +44,7 @@ export class SituationService {
 
         if (!findSituation) throw new NotFoundException('Essa situação não existe');
 
-        return { findSituation };
+        return findSituation;
     }
 
 

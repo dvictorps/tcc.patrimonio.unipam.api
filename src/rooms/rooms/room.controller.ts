@@ -1,48 +1,48 @@
 import { Controller, Post, Get, Body, Req, Res, Param, UseGuards, Patch, Delete, Query } from '@nestjs/common';
-import { DepartmentDto } from './dto/room.dto';
+import { RoomDto } from './dto/room.dto';
 import { JwtAuthGuard } from '../../auth/jwt.guard';
-import { DepartmentService } from './room.service';
+import { RoomService } from './room.service';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Role, Roles } from 'src/roles/roles.decorator';
-import { DepartmentUpdateDto } from './dto/room.update.dto';
+import { RoomUpdateDto } from './dto/room.update.dto';
 
-@Controller('department')
-export class DepartmentController {
-    constructor(private readonly departmentService: DepartmentService) { }
+@Controller('room')
+export class RoomController {
+    constructor(private readonly roomService: RoomService) { }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Post('register')
-    registerDepartment(@Body() dto: DepartmentDto) {
-        return this.departmentService.registerDepartment(dto)
+    registerRoom(@Body() dto: RoomDto) {
+        return this.roomService.registerRoom(dto)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Get()
-    getDepartments() {
-        return this.departmentService.getDepartments()
+    getRooms() {
+        return this.roomService.getRooms()
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Get(':id')
-    getDepartment(@Param('id') id: string) {
-        return this.departmentService.getDepartment(id)
+    getRoom(@Param('id') id: string) {
+        return this.roomService.getRoom(id)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Delete('delete/:id')
-    deleteDepartment(@Param('id') id: string) {
-        return this.departmentService.deleteDepartment(id)
+    deleteRoom(@Param('id') id: string) {
+        return this.roomService.deleteRoom(id)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
     @Patch('update/:id')
-    updateDepartment(@Body() dto: DepartmentUpdateDto, @Param() params: { id: string }) {
-        return this.departmentService.updateDepartment(dto, params.id)
+    updateRoom(@Body() dto: RoomUpdateDto, @Param() params: { id: string }) {
+        return this.roomService.updateRoom(dto, params.id)
     }
 
 }

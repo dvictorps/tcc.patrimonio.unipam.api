@@ -51,7 +51,7 @@ export class CityService {
 
         if (!findCity) throw new NotFoundException('Essa cidade não existe');
 
-        return { findCity };
+        return findCity;
     }
 
 

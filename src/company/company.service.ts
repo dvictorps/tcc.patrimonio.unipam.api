@@ -63,7 +63,7 @@ export class CompanyService {
         const findCompany = await this.prisma.empresa.findUnique({ where: { IdEmpresa: parseInt(id) } })
         if (!findCompany) throw new NotFoundException;
 
-        return { findCompany };
+        return findCompany;
     }
 
     async deleteCompany(id: string) {

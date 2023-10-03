@@ -44,7 +44,7 @@ export class CategoryService {
 
         if (!findCategory) throw new NotFoundException('Essa categoria não existe');
 
-        return { findCategory };
+        return findCategory;
     }
 
 

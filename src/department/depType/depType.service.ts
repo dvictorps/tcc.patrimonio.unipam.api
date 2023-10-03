@@ -44,7 +44,7 @@ export class DepTypeService {
 
         if (!findDepType) throw new NotFoundException('Esse tipo de departamento não existe');
 
-        return { findDepType };
+        return findDepType;
     }
 
 

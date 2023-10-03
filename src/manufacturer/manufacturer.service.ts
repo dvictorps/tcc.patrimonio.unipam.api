@@ -44,7 +44,7 @@ export class ManufacturerService {
 
         if (!findManufacturer) throw new NotFoundException('Essa fabricante não existe');
 
-        return { findManufacturer };
+        return findManufacturer;
     }
 
 

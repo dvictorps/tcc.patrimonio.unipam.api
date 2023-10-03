@@ -1,14 +1,10 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString, Length, IsOptional, isNotEmpty, IsDate } from 'class-validator';
 
-export class DepartmentDto {
+export class RoomDto {
 
     @IsNotEmpty()
     @IsString()
-    public NomeDepartamento: string;
-
-    @IsNotEmpty()
-    @IsNumber()
-    public IdSituacaoDepartamento: number
+    public DescricaoSala: string;
 
     @IsNotEmpty()
     @IsNumber()
@@ -16,5 +12,9 @@ export class DepartmentDto {
 
     @IsNotEmpty()
     @IsNumber()
-    public IdTipoDepartamento: number
+    public IdSituacaoSala: number
+
+    @IsNotEmpty()
+    @IsNumber()
+    public IdTipoSala: number
 }   

@@ -45,7 +45,7 @@ export class BlockService {
 
         if (!findBlock) throw new NotFoundException('Esse bloco não existe');
 
-        return { findBlock };
+        return findBlock;
     }
 
 

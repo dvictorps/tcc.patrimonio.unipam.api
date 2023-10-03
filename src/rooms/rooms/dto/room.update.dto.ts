@@ -1,20 +1,23 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString, Length, IsOptional, isNotEmpty, IsDate } from 'class-validator';
 
-export class DepartmentUpdateDto {
-
+export class RoomUpdateDto {
     @IsOptional()
+    @IsNotEmpty()
     @IsString()
-    public NomeDepartamento: string;
+    public DescricaoSala: string;
 
     @IsOptional()
-    @IsNumber()
-    public IdSituacaoDepartamento: number
-
-    @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public IdBlocoDepartamento: number
 
     @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
-    public IdTipoDepartamento: number
+    public IdSituacaoSala: number
+
+    @IsOptional()
+    @IsNotEmpty()
+    @IsNumber()
+    public IdTipoSala: number
 }   
