@@ -41,4 +41,8 @@ export class EquipmentDto {
     @IsNotEmpty()
     @IsString()
     public VencimentoGarantia: Date
+
+    @IsNotEmpty()
+    @IsNumber()
+    public IdSala: number
 }   

@@ -20,9 +20,9 @@ export class EquipmentService {
         }
 
         const { Patrimonio, DescricaoEquipamento, NumeroSerial, IdEmpresa, IdCategoriaEquipamento, IdSituacaoEquipamento, IdFabricante,
-            IdDepartamento, DataAquisicao, VencimentoGarantia } = dto;
+            IdDepartamento, DataAquisicao, VencimentoGarantia, IdSala } = dto;
 
-        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento, checkPatrimonio, checkNumeroSerial] = await Promise.all([
+        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento, checkPatrimonio, checkNumeroSerial, findSala] = await Promise.all([
             this.prisma.empresa.findUnique({ where: { IdEmpresa: IdEmpresa } }),
             this.prisma.categoriaequipamento.findUnique({ where: { IdCategoriaEquipamento: IdCategoriaEquipamento } }),
             this.prisma.situacaoequipamento.findUnique({ where: { IdSituacaoEquipamento: IdSituacaoEquipamento } }),
@@ -30,6 +30,7 @@ export class EquipmentService {
             this.prisma.departamento.findUnique({ where: { IdDepartamento: IdDepartamento } }),
             this.prisma.equipamento.findUnique({ where: { Patrimonio: Patrimonio } }),
             this.prisma.equipamento.findUnique({ where: { NumeroSerial: NumeroSerial } }),
+            this.prisma.sala.findUnique({ where: { IdSala: IdSala } }),
         ]);
 
         if (!findEmpresa) throw new BadRequestException('A empresa que você está tentando adicionar não existe')
@@ -37,6 +38,7 @@ export class EquipmentService {
         if (!findSituacao) throw new BadRequestException('A opção selecionada não existe')
         if (!findFabricante) throw new BadRequestException('A fabricante selecionada não existe')
         if (!findDepartamento) throw new BadRequestException('O departamento selecionado não existe')
+        if (!findSala) throw new BadRequestException('A sala que você está buscando não existe')
         if (checkPatrimonio || checkNumeroSerial) throw new BadRequestException('Numero de Patrimonio ou Serial já existente')
 
         await this.prisma.equipamento.create({
@@ -51,6 +53,7 @@ export class EquipmentService {
                 situacaoequipamento: { connect: { IdSituacaoEquipamento: IdSituacaoEquipamento } },
                 fabricante: { connect: { IdFabricante: IdFabricante } },
                 departamento: { connect: { IdDepartamento: IdDepartamento } },
+                sala: { connect: { IdSala: IdSala } },
                 DataModificacao: new Date()
             }
         })
@@ -235,9 +238,9 @@ export class EquipmentService {
         }
 
         const { Patrimonio, DescricaoEquipamento, NumeroSerial, IdEmpresa, IdCategoriaEquipamento, IdSituacaoEquipamento, IdFabricante,
-            IdDepartamento, DataAquisicao, VencimentoGarantia } = dto;
+            IdDepartamento, DataAquisicao, VencimentoGarantia, IdSala } = dto;
 
-        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento, checkPatrimonio, checkNumeroSerial, checkEquipamento] = await Promise.all([
+        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento, checkPatrimonio, checkNumeroSerial, checkEquipamento, findSala] = await Promise.all([
             IdEmpresa ? this.prisma.empresa.findUnique({ where: { IdEmpresa: IdEmpresa } }) : Promise.resolve(undefined),
             IdCategoriaEquipamento ? this.prisma.categoriaequipamento.findUnique({ where: { IdCategoriaEquipamento: IdCategoriaEquipamento } }) : Promise.resolve(undefined),
             IdSituacaoEquipamento ? this.prisma.situacaoequipamento.findUnique({ where: { IdSituacaoEquipamento: IdSituacaoEquipamento } }) : Promise.resolve(undefined),
@@ -245,7 +248,8 @@ export class EquipmentService {
             IdDepartamento ? this.prisma.departamento.findUnique({ where: { IdDepartamento: IdDepartamento } }) : Promise.resolve(undefined),
             Patrimonio ? this.prisma.equipamento.findUnique({ where: { Patrimonio: Patrimonio } }) : Promise.resolve(undefined),
             NumeroSerial ? this.prisma.equipamento.findUnique({ where: { NumeroSerial: NumeroSerial } }) : Promise.resolve(undefined),
-            this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(id) } })
+            this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(id) } }),
+            IdSala ? this.prisma.sala.findUnique({ where: { IdSala: IdSala } }) : Promise.resolve(undefined),
         ]);
 
         if (!checkEquipamento) throw new NotFoundException('O equipamento que você quer editar não existe')
@@ -255,6 +259,7 @@ export class EquipmentService {
         if (IdFabricante && !findFabricante) throw new NotFoundException('A fabricante selecionada não existe')
         if (IdDepartamento && !findDepartamento) throw new NotFoundException('O departamento selecionado não existe')
         if (checkPatrimonio || checkNumeroSerial) throw new BadRequestException('Numero de Patrimonio ou Serial já existente')
+        if (!findSala) throw new NotFoundException('A sala que você quer adicionar não existe')
 
         const updatedDataAquisicao = DataAquisicao ? new Date(DataAquisicao) : undefined;
         const updatedVencimentoGarantia = VencimentoGarantia ? new Date(VencimentoGarantia) : undefined;
@@ -271,7 +276,8 @@ export class EquipmentService {
                 IdSituacaoEquipamento: IdSituacaoEquipamento,
                 IdFabricante: IdFabricante,
                 IdDepartamento: IdDepartamento,
-                DataModificacao: new Date()
+                DataModificacao: new Date(),
+                IdSala: IdSala
             },
             where: {
                 IdEquipamento: parseInt(id)

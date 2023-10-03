@@ -67,13 +67,14 @@ model blocodepartamento {
   IdBlocoDepartamento        Int            @id @default(autoincrement()) @db.TinyInt
   DescricaoBlocoDepartamento String         @db.VarChar(20)
   departamento               departamento[]
+  sala                       sala[]
 }
 
-model blocosala {
-  IdBlocoSala        Int    @id @default(autoincrement()) @db.TinyInt
-  DescricaoBlocoSala String @db.VarChar(10)
-  sala               sala[]
-}
+// model blocosala {
+//   IdBlocoSala        Int    @id @default(autoincrement()) @db.TinyInt
+//   DescricaoBlocoSala String @db.VarChar(10)
+//   sala               sala[]
+// }
 
 model categoriaequipamento {
   IdCategoriaEquipamento        Int           @id @default(autoincrement())
@@ -326,12 +327,14 @@ model equipamento {
   IdSituacaoEquipamento  Int                     @db.TinyInt
   IdFabricante           Int
   IdDepartamento         Int
+  IdSala                 Int?
   datashow               datashow?
   categoriaequipamento   categoriaequipamento    @relation(fields: [IdCategoriaEquipamento], references: [IdCategoriaEquipamento], onUpdate: Restrict, map: "FKEquipament269")
   fabricante             fabricante              @relation(fields: [IdFabricante], references: [IdFabricante], onUpdate: Restrict, map: "FKEquipament29013")
   situacaoequipamento    situacaoequipamento     @relation(fields: [IdSituacaoEquipamento], references: [IdSituacaoEquipamento], onUpdate: Restrict, map: "FKEquipament310433")
   empresa                empresa                 @relation(fields: [IdEmpresa], references: [IdEmpresa], onUpdate: Restrict, map: "FKEquipament462011")
   departamento           departamento            @relation(fields: [IdDepartamento], references: [IdDepartamento], onUpdate: Restrict, map: "FKEquipament67720")
+  sala                   sala?                   @relation(fields: [IdSala], references: [IdSala], onUpdate: Restrict)
   equipamentoemprestimo  equipamentoemprestimo[]
   gabinete               gabinete?
   historicoequipamento   historicoequipamento[]
@@ -793,18 +796,18 @@ model responsavelguia {
 }
 
 model sala {
-  IdSala         Int          @id @default(autoincrement())
-  DescricaoSala  String       @db.VarChar(10)
-  IdBlocoSala    Int          @db.TinyInt
-  IdSituacaoSala Int          @db.TinyInt
-  IdTipoSala     Int          @db.TinyInt
-  ocorrencia     ocorrencia[]
-  tiposala       tiposala     @relation(fields: [IdTipoSala], references: [IdTipoSala], onUpdate: Restrict, map: "FKSala213085")
-  blocosala      blocosala    @relation(fields: [IdBlocoSala], references: [IdBlocoSala], onUpdate: Restrict, map: "FKSala39636")
-  situacaosala   situacaosala @relation(fields: [IdSituacaoSala], references: [IdSituacaoSala], onUpdate: Restrict, map: "FKSala646356")
+  IdSala              Int               @id @default(autoincrement())
+  DescricaoSala       String            @unique @db.VarChar(10)
+  IdBlocoDepartamento Int               @db.TinyInt
+  IdSituacaoSala      Int               @db.TinyInt
+  IdTipoSala          Int               @db.TinyInt
+  ocorrencia          ocorrencia[]
+  tiposala            tiposala          @relation(fields: [IdTipoSala], references: [IdTipoSala], onUpdate: Restrict, map: "FKSala213085")
+  blocodepartamento   blocodepartamento @relation(fields: [IdBlocoDepartamento], references: [IdBlocoDepartamento], onUpdate: Restrict)
+  situacaosala        situacaosala      @relation(fields: [IdSituacaoSala], references: [IdSituacaoSala], onUpdate: Restrict, map: "FKSala646356")
+  equipamento         equipamento[]
 
   @@index([IdTipoSala], map: "FKSala213085")
-  @@index([IdBlocoSala], map: "FKSala39636")
   @@index([IdSituacaoSala], map: "FKSala646356")
 }
 
