@@ -22,14 +22,12 @@ export class EquipmentService {
         const { Patrimonio, DescricaoEquipamento, NumeroSerial, IdEmpresa, IdCategoriaEquipamento, IdSituacaoEquipamento, IdFabricante,
             IdDepartamento, DataAquisicao, VencimentoGarantia } = dto;
 
-        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento, checkPatrimonio, checkNumeroSerial] = await Promise.all([
+        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento] = await Promise.all([
             this.prisma.empresa.findUnique({ where: { IdEmpresa: IdEmpresa } }),
             this.prisma.categoriaequipamento.findUnique({ where: { IdCategoriaEquipamento: IdCategoriaEquipamento } }),
             this.prisma.situacaoequipamento.findUnique({ where: { IdSituacaoEquipamento: IdSituacaoEquipamento } }),
             this.prisma.fabricante.findUnique({ where: { IdFabricante: IdFabricante } }),
             this.prisma.departamento.findUnique({ where: { IdDepartamento: IdDepartamento } }),
-            this.prisma.equipamento.findUnique({ where: { Patrimonio: Patrimonio } }),
-            this.prisma.equipamento.findUnique({ where: { NumeroSerial: NumeroSerial } }),
         ]);
 
         if (!findEmpresa) throw new BadRequestException('A empresa que você está tentando adicionar não existe')
@@ -37,7 +35,6 @@ export class EquipmentService {
         if (!findSituacao) throw new BadRequestException('A opção selecionada não existe')
         if (!findFabricante) throw new BadRequestException('A fabricante selecionada não existe')
         if (!findDepartamento) throw new BadRequestException('O departamento selecionado não existe')
-        if (checkPatrimonio || checkNumeroSerial) throw new BadRequestException('Numero de Patrimonio ou Serial já existente')
 
         await this.prisma.equipamento.create({
             data: {
@@ -237,14 +234,12 @@ export class EquipmentService {
         const { Patrimonio, DescricaoEquipamento, NumeroSerial, IdEmpresa, IdCategoriaEquipamento, IdSituacaoEquipamento, IdFabricante,
             IdDepartamento, DataAquisicao, VencimentoGarantia } = dto;
 
-        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento, checkPatrimonio, checkNumeroSerial, checkEquipamento] = await Promise.all([
+        const [findEmpresa, findCategoria, findSituacao, findFabricante, findDepartamento, checkEquipamento] = await Promise.all([
             IdEmpresa ? this.prisma.empresa.findUnique({ where: { IdEmpresa: IdEmpresa } }) : Promise.resolve(undefined),
             IdCategoriaEquipamento ? this.prisma.categoriaequipamento.findUnique({ where: { IdCategoriaEquipamento: IdCategoriaEquipamento } }) : Promise.resolve(undefined),
             IdSituacaoEquipamento ? this.prisma.situacaoequipamento.findUnique({ where: { IdSituacaoEquipamento: IdSituacaoEquipamento } }) : Promise.resolve(undefined),
             IdFabricante ? this.prisma.fabricante.findUnique({ where: { IdFabricante: IdFabricante } }) : Promise.resolve(undefined),
             IdDepartamento ? this.prisma.departamento.findUnique({ where: { IdDepartamento: IdDepartamento } }) : Promise.resolve(undefined),
-            Patrimonio ? this.prisma.equipamento.findUnique({ where: { Patrimonio: Patrimonio } }) : Promise.resolve(undefined),
-            NumeroSerial ? this.prisma.equipamento.findUnique({ where: { NumeroSerial: NumeroSerial } }) : Promise.resolve(undefined),
             this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(id) } })
         ]);
 
@@ -254,7 +249,6 @@ export class EquipmentService {
         if (IdSituacaoEquipamento && !findSituacao) throw new NotFoundException('A opção selecionada não existe')
         if (IdFabricante && !findFabricante) throw new NotFoundException('A fabricante selecionada não existe')
         if (IdDepartamento && !findDepartamento) throw new NotFoundException('O departamento selecionado não existe')
-        if (checkPatrimonio || checkNumeroSerial) throw new BadRequestException('Numero de Patrimonio ou Serial já existente')
 
         const updatedDataAquisicao = DataAquisicao ? new Date(DataAquisicao) : undefined;
         const updatedVencimentoGarantia = VencimentoGarantia ? new Date(VencimentoGarantia) : undefined;
