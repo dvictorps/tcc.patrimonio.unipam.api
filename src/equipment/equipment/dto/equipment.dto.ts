@@ -1,44 +1,48 @@
-import { IsNumber, IsString, IsOptional, IsDate } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString, Length, IsOptional, isNotEmpty, IsDate } from 'class-validator';
 
-export class EquipmentUpdateDto {
+export class EquipmentDto {
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
     public Patrimonio: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
     public DescricaoEquipamento: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
     public NumeroSerial: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public IdEmpresa: number
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public IdCategoriaEquipamento: number
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public IdSituacaoEquipamento: number
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public IdFabricante: number
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsNumber()
     public IdDepartamento: number
 
-    @IsOptional()
-    @IsDate()
+    @IsNotEmpty()
+    @IsString()
     public DataAquisicao: Date
 
-    @IsOptional()
-    @IsDate()
+    @IsNotEmpty()
+    @IsString()
     public VencimentoGarantia: Date
+
+    @IsNotEmpty()
+    @IsNumber()
+    public IdSala: number
 }   

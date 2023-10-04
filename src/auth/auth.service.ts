@@ -56,20 +56,18 @@ export class AuthService {
 
         if (!checkPassword) throw new BadRequestException('Credenciais incorretas');
 
-        const token = await this.signToken({ id: checkUser.IdPessoa, user: checkUser.Usuario, role: checkUser.IdTipoPessoa })
+        const token = await this.signToken({ id: checkUser.IdPessoa, user: checkUser.Usuario, role: checkUser.IdTipoPessoa, name: checkUser.Nome })
 
         if (!token) {
             throw new ForbiddenException();
         }
 
-        res.cookie('token', token)
-
+        res.cookie('token', token, { path: '/' })
         return res.send(({ message: "Logado com Sucesso" }));
     }
     async signout(req: Request, res: Response) {
 
         res.clearCookie('token');
-
         return res.send({ message: "Deslogado com sucesso" });
     }
 
@@ -84,7 +82,7 @@ export class AuthService {
         return await bcrypt.compare(args.password, args.hash);
     }
 
-    async signToken(args: { id: number, user: string, role: number }) {
+    async signToken(args: { id: number, user: string, role: number, name: string }) {
         const payload = args
 
         return this.jwt.signAsync(payload, { secret: jwtSecret })
