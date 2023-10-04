@@ -173,16 +173,14 @@ export class EquipmentService {
             take: takeValue,
             skip: skipValue,
             where: where,
+
         }
 
-        // if (skipValue) {
-        //     query['orderBy'] = {
-        //         IdEquipamento: 'asc'
-        //     }
-        //     query['cursor'] = {
-        //         IdEquipamento: skipValue
-        //     }
-        // }
+        if (takeValue) {
+            query['orderBy'] = {
+                IdEquipamento: 'desc'
+            }
+        }
 
         // if (skipValue > 0) {
         //     query['skip'] = 1
