@@ -91,6 +91,20 @@ export class EquipmentController {
         return this.equipmentService.enableEquipments(equipments)
     }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Protected)
+    @Get('graphics/count')
+    getEquipmentForPizzaGraphics() {
+        return this.equipmentService.getEquipmentForPizzaGraphics()
+    }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Protected)
+    @Get('graphics/bar')
+    getEquipmentForGraphics() {
+        return this.equipmentService.getEquipmentForGraphics()
+    }
 
 }
+
+

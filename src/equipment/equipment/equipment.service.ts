@@ -199,6 +199,36 @@ export class EquipmentService {
         return findEquipment;
     }
 
+    async getEquipmentForGraphics() {
+
+        const departments = await this.prisma.departamento.findMany({
+            select: {
+                IdDepartamento: true,
+                NomeDepartamento: true,
+            },
+        });
+
+        const results = {};
+
+        for (const department of departments) {
+            const count = await this.prisma.equipamento.count({
+                where: {
+                    IdDepartamento: department.IdDepartamento,
+                },
+            });
+
+            results[department.NomeDepartamento] = count;
+        }
+
+        return results
+    }
+
+    async getEquipmentForPizzaGraphics() {
+        const numberAtivos = await this.prisma.equipamento.count({ where: { IdSituacaoEquipamento: 1 } })
+        const numberInativos = await this.prisma.equipamento.count({ where: { IdSituacaoEquipamento: 2 } })
+
+        return { numberAtivos, numberInativos }
+    }
 
     async disableEquipment(id: string) {
 
