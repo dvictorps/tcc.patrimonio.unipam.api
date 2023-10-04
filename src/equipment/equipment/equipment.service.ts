@@ -189,7 +189,7 @@ export class EquipmentService {
         // }
 
         const data = await this.prisma.equipamento.findMany(query);
-        const totalRecords = await this.prisma.equipamento.count();
+        const totalRecords = await this.prisma.equipamento.count({ where: where });
 
         return { totalRecords, data };
     }
@@ -201,34 +201,98 @@ export class EquipmentService {
         return findEquipment;
     }
 
-    async deleteEquipment(id: string) {
+
+    async disableEquipment(id: string) {
 
         const findEquipment = await this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(id) } })
         if (!findEquipment) throw new NotFoundException;
 
-        await this.prisma.equipamento.delete({
+        const findSituation = await this.prisma.situacaoequipamento.findUnique({ where: { DescricaoSituacaoEquipamento: 'Baixado' } })
+        if (!findSituation) throw new BadRequestException('Não é possivel dar baixa o equipamento pois o dado de baixar não consta na tabela')
+
+        await this.prisma.equipamento.update({
+            data: {
+                IdSituacaoEquipamento: findSituation.IdSituacaoEquipamento
+            },
             where: {
                 IdEquipamento: parseInt(id)
             }
         })
 
-        return { message: 'Equipamento excluido com suceesso' }
+        return { message: 'Equipamento baixado com suceesso' }
+    }
+
+    async enableEquipment(id: string) {
+
+        const findEquipment = await this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(id) } })
+        if (!findEquipment) throw new NotFoundException;
+
+        const findSituation = await this.prisma.situacaoequipamento.findUnique({ where: { DescricaoSituacaoEquipamento: 'Ativo' } })
+        if (!findSituation) throw new BadRequestException('Não é possivel ativar o equipamento pois o dado de ativar não consta na tabela')
+
+        await this.prisma.equipamento.update({
+            data: {
+                IdSituacaoEquipamento: findSituation.IdSituacaoEquipamento
+            },
+            where: {
+                IdEquipamento: parseInt(id)
+            }
+        })
+
+        return { message: 'Equipamento ativo com suceesso' }
     }
 
 
-    async deleteEquipments(equipments: string[]) {
+
+    async disableEquipments(equipments: string[]) {
 
         for (const equipment of equipments) {
 
             const findEquipment = await this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(equipment) } })
             if (!findEquipment) throw new NotFoundException;
 
-            await this.prisma.equipamento.delete({ where: { IdEquipamento: parseInt(equipment) } });
+            const findSituation = await this.prisma.situacaoequipamento.findUnique({ where: { DescricaoSituacaoEquipamento: 'Baixado' } })
+            if (!findSituation) throw new BadRequestException('Não é possivel dar baixa o equipamento pois o dado de baixar não consta na tabela')
+
+            await this.prisma.equipamento.update({
+                data: {
+                    IdSituacaoEquipamento: findSituation.IdSituacaoEquipamento
+                },
+                where: {
+                    IdEquipamento: parseInt(equipment)
+                }
+            });
 
         }
 
-        return { message: 'Itens excluídos com sucesso' };
+        return { message: 'Itens baixados com sucesso' };
     }
+
+
+    async enableEquipments(equipments: string[]) {
+
+        for (const equipment of equipments) {
+
+            const findEquipment = await this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(equipment) } })
+            if (!findEquipment) throw new NotFoundException;
+
+            const findSituation = await this.prisma.situacaoequipamento.findUnique({ where: { DescricaoSituacaoEquipamento: 'Ativo' } })
+            if (!findSituation) throw new BadRequestException('Não é reativar o equipamento pois o dado de ativar não consta na tabela')
+
+            await this.prisma.equipamento.update({
+                data: {
+                    IdSituacaoEquipamento: findSituation.IdSituacaoEquipamento
+                },
+                where: {
+                    IdEquipamento: parseInt(equipment)
+                }
+            });
+
+        }
+
+        return { message: 'Itens ativos com sucesso' };
+    }
+
 
 
     async updateEquipment(dto: EquipmentUpdateDto, id: string) {
@@ -259,7 +323,7 @@ export class EquipmentService {
         if (IdFabricante && !findFabricante) throw new NotFoundException('A fabricante selecionada não existe')
         if (IdDepartamento && !findDepartamento) throw new NotFoundException('O departamento selecionado não existe')
         if (checkPatrimonio || checkNumeroSerial) throw new BadRequestException('Numero de Patrimonio ou Serial já existente')
-        if (!findSala) throw new NotFoundException('A sala que você quer adicionar não existe')
+        if (IdSala && !findSala) throw new NotFoundException('A sala que você quer adicionar não existe')
 
         const updatedDataAquisicao = DataAquisicao ? new Date(DataAquisicao) : undefined;
         const updatedVencimentoGarantia = VencimentoGarantia ? new Date(VencimentoGarantia) : undefined;

@@ -34,7 +34,6 @@ export class BlockService {
             select: {
                 IdBlocoDepartamento: true,
                 DescricaoBlocoDepartamento: true,
-                departamento: true
             }
         })
     }

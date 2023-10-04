@@ -57,16 +57,16 @@ export class EquipmentController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
-    @Delete('delete/:id')
-    deleteEquipment(@Param('id') id: string) {
-        return this.equipmentService.deleteEquipment(id)
+    @Patch('disable/:id')
+    disableEquipment(@Param('id') id: string) {
+        return this.equipmentService.disableEquipment(id)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Protected)
-    @Delete('delete')
-    deleteEquipments(@Query('equipments') equipments: string[],) {
-        return this.equipmentService.deleteEquipments(equipments)
+    @Patch('disable')
+    disableEquipments(@Query('equipments') equipments: string[],) {
+        return this.equipmentService.disableEquipments(equipments)
     }
 
 
@@ -76,5 +76,21 @@ export class EquipmentController {
     updateEquipment(@Body() dto: EquipmentUpdateDto, @Param() params: { id: string }) {
         return this.equipmentService.updateEquipment(dto, params.id)
     }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Protected)
+    @Patch('enable/:id')
+    enableEquipment(@Param('id') id: string) {
+        return this.equipmentService.enableEquipment(id)
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Protected)
+    @Patch('enable')
+    enableEquipments(@Query('equipments') equipments: string[],) {
+        return this.equipmentService.enableEquipments(equipments)
+    }
+
+
 
 }

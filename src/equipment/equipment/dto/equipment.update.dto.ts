@@ -50,6 +50,7 @@ export class EquipmentUpdateDto {
     @IsNotEmpty()
     public VencimentoGarantia: Date
 
+    @IsOptional()
     @IsNotEmpty()
     @IsNumber()
     public IdSala: number
