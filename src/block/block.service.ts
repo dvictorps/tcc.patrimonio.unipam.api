@@ -34,6 +34,9 @@ export class BlockService {
             select: {
                 IdBlocoDepartamento: true,
                 DescricaoBlocoDepartamento: true,
+            },
+            orderBy: {
+                IdBlocoDepartamento: 'desc'
             }
         })
     }

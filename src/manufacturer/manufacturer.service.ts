@@ -34,6 +34,9 @@ export class ManufacturerService {
             select: {
                 IdFabricante: true,
                 NomeFabricante: true,
+            },
+            orderBy: {
+                IdFabricante: 'desc'
             }
         })
     }

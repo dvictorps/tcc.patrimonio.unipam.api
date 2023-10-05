@@ -34,7 +34,7 @@ export class EquipmentController {
     ) {
 
         const skipValue = skip ? parseInt(skip, 10) : 0;
-        const takeValue = take ? parseInt(take, 10) : 10;
+        const takeValue = take ? parseInt(take, 10) : undefined;
         const searchPatrimValue = searchPatrim ? searchPatrim : undefined;
         const searchDescValue = searchDesc ? searchDesc : undefined;
         const searchSerialValue = searchSerial ? searchSerial : undefined;
@@ -104,6 +104,42 @@ export class EquipmentController {
     getEquipmentForGraphics() {
         return this.equipmentService.getEquipmentForGraphics()
     }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Protected)
+    @Delete('delete/:id')
+    deleteEquipment(@Param('id') id: string) {
+        return this.equipmentService.deleteEquipment(id)
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Protected)
+    @Get('formated/get')
+    getEquipmentsFormated(
+        @Query('searchPatrim') searchPatrim: string,
+        @Query('searchDesc') searchDesc: string,
+        @Query('searchSerial') searchSerial: string,
+        @Query('company') company: string,
+        @Query('category') category: string,
+        @Query('situation') situation: string,
+        @Query('manufacturer') manufacturer: string,
+        @Query('department') department: string
+    ) {
+
+        const searchPatrimValue = searchPatrim ? searchPatrim : undefined;
+        const searchDescValue = searchDesc ? searchDesc : undefined;
+        const searchSerialValue = searchSerial ? searchSerial : undefined;
+        const companyValue = company ? company : undefined;
+        const categoryValue = category ? category : undefined;
+        const situationValue = situation ? situation : undefined;
+        const manufacturerValue = manufacturer ? manufacturer : undefined;
+        const departmentValue = department ? department : undefined;
+
+        return this.equipmentService.getEquipmentsFormated(searchPatrimValue, searchDescValue, searchSerialValue,
+            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue)
+    }
+
+
 
 }
 

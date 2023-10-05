@@ -56,6 +56,9 @@ export class RoomService {
                 IdTipoSala: true,
                 IdSituacaoSala: true
 
+            },
+            orderBy: {
+                IdSala: 'desc'
             }
         })
     }

@@ -90,55 +90,6 @@ export class EquipmentService {
             },
         }
 
-        // if (companyValue) {
-        //     where['IdEmpresa'] = {
-        //         equals: parseInt(companyValue)
-        //     }
-        // };
-
-        // if (categoryValue) {
-        //     where['IdCategoriaEquipamento'] = {
-        //         equals: parseInt(categoryValue)
-        //     }
-        // };
-
-        // if (situationValue) {
-        //     where['IdSituacaoEquipamento'] = {
-        //         equals: parseInt(situationValue)
-        //     }
-        // };
-
-        // if (manufacturerValue) {
-        //     where['IdFabricante'] = {
-        //         equals: parseInt(manufacturerValue)
-        //     }
-        // };
-
-        // if (departmentValue) {
-        //     where['IdEmpresa'] = {
-        //         equals: parseInt(departmentValue)
-        //     }
-        // };
-
-
-        // return await this.prisma.equipamento.findMany({
-        //     // take: takeValue,
-        //     // skip: skipValue,
-        //     where: where
-        // })
-
-        // const where = {
-        //     Patrimonio: {
-        //         contains: searchPatrimValue
-        //     },
-        //     DescricaoEquipamento: {
-        //         contains: searchDescValue,
-        //     },
-        //     NumeroSerial: {
-        //         contains: searchSerialValue
-        //     },
-        // }
-
         if (companyValue) {
             where['IdEmpresa'] = {
                 equals: parseInt(companyValue)
@@ -182,9 +133,6 @@ export class EquipmentService {
             }
         }
 
-        // if (skipValue > 0) {
-        //     query['skip'] = 1
-        // }
 
         const data = await this.prisma.equipamento.findMany(query);
         const totalRecords = await this.prisma.equipamento.count({ where: where });
@@ -248,6 +196,19 @@ export class EquipmentService {
         })
 
         return { message: 'Equipamento baixado com suceesso' }
+    }
+
+    async deleteEquipment(id: string) {
+
+        const findEquipment = await this.prisma.equipamento.findUnique({ where: { IdEquipamento: parseInt(id) } })
+        if (!findEquipment) throw new NotFoundException;
+
+        await this.prisma.equipamento.delete({
+            where: {
+                IdEquipamento: parseInt(id)
+            }
+        })
+        return { message: 'Equipamento removido com suceesso' }
     }
 
     async enableEquipment(id: string) {
@@ -379,6 +340,89 @@ export class EquipmentService {
         return { message: 'Equipamento atualizado com sucesso' }
 
 
+    }
+
+    async getEquipmentsFormated(
+        searchPatrimValue: string,
+        searchDescValue: string,
+        searchSerialValue: string,
+        companyValue: string,
+        categoryValue: string,
+        situationValue: string,
+        manufacturerValue: string,
+        departmentValue: string
+    ) {
+
+        const where = {
+            Patrimonio: {
+                contains: searchPatrimValue
+            },
+            DescricaoEquipamento: {
+                contains: searchDescValue,
+            },
+            NumeroSerial: {
+                contains: searchSerialValue
+            },
+        }
+
+        if (companyValue) {
+            where['IdEmpresa'] = {
+                equals: parseInt(companyValue)
+            }
+        };
+
+        if (categoryValue) {
+            where['IdCategoriaEquipamento'] = {
+                equals: parseInt(categoryValue)
+            }
+        };
+
+        if (situationValue) {
+            where['IdSituacaoEquipamento'] = {
+                equals: parseInt(situationValue)
+            }
+        };
+
+        if (manufacturerValue) {
+            where['IdFabricante'] = {
+                equals: parseInt(manufacturerValue)
+            }
+        };
+
+        if (departmentValue) {
+            where['IdDepartamento'] = {
+                equals: parseInt(departmentValue)
+            }
+        };
+
+
+        const data = await this.prisma.equipamento.findMany({
+            where: where, orderBy: { IdEquipamento: 'desc' },
+            include: {
+                departamento: true, empresa: true, categoriaequipamento: true, situacaoequipamento: true, fabricante: true, sala: true
+            }
+        });
+        const totalRecords = await this.prisma.equipamento.count({ where: where });
+
+        return {
+            totalRecords, data: data.map((d) => ({
+                IdEquipamento: d.IdEquipamento,
+                Patrimonio: d.Patrimonio,
+                NumeroSerial: d.NumeroSerial,
+                Sala: d.sala && d.sala.DescricaoSala,
+                Departamento: d.departamento && d.departamento.NomeDepartamento,
+                SituacaoEquipamento: d.situacaoequipamento && d.situacaoequipamento.DescricaoSituacaoEquipamento,
+                DescricaoEquipamento: d.DescricaoEquipamento,
+                DataAquisicao: d.DataAquisicao.toLocaleDateString(),
+                VencimentoGarantia: d.VencimentoGarantia.toLocaleDateString(),
+                DataCadastro: d.DataCadastro.toLocaleDateString(),
+                DataModificacao: d.DataModificacao.toLocaleDateString(),
+                Empresa: d.empresa && d.empresa.NomeEmpresa,
+                CategoriaEquipamento: d.categoriaequipamento && d.categoriaequipamento.DescricaoCategoriaEquipamento,
+                Fabricante: d.fabricante && d.fabricante.NomeFabricante,
+                IdSituacaoEquipamento: d.IdSituacaoEquipamento,
+            }))
+        };
     }
 
 

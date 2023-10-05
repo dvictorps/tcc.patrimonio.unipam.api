@@ -55,6 +55,9 @@ export class CompanyService {
                 SiteEmpresa: true,
                 TelefoneEmpresa: true,
                 IdCidade: true
+            },
+            orderBy: {
+                IdEmpresa: 'desc'
             }
         })
     }

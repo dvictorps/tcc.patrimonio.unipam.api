@@ -34,6 +34,9 @@ export class RoomTypeService {
             select: {
                 IdTipoSala: true,
                 DescricaoTipoSala: true,
+            },
+            orderBy: {
+                IdTipoSala: 'desc'
             }
         })
     }

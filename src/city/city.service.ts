@@ -41,6 +41,9 @@ export class CityService {
                 NomeCidade: true,
                 IdCidade: true,
                 IdEstado: true
+            },
+            orderBy: {
+                IdCidade: 'desc'
             }
         })
     }

@@ -34,6 +34,9 @@ export class DepTypeService {
             select: {
                 IdTipoDepartamento: true,
                 TipoDepartamento: true,
+            },
+            orderBy: {
+                IdTipoDepartamento: 'desc'
             }
         })
     }

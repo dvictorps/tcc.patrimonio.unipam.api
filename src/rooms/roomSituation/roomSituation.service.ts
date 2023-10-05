@@ -34,6 +34,9 @@ export class RoomSituationService {
             select: {
                 IdSituacaoSala: true,
                 DescricaoSituacaoSala: true,
+            },
+            orderBy: {
+                IdSituacaoSala: 'desc'
             }
         })
     }

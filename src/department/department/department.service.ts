@@ -56,6 +56,9 @@ export class DepartmentService {
                 IdTipoDepartamento: true,
                 IdSituacaoDepartamento: true
 
+            },
+            orderBy: {
+                IdDepartamento: 'desc'
             }
         })
     }
