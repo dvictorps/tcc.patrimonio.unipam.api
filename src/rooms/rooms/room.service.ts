@@ -93,13 +93,13 @@ export class RoomService {
 
         const [findBloco, findTipo, findSituacao, checkNome] = await Promise.all([
             IdBlocoDepartamento ? this.prisma.blocodepartamento.findUnique({ where: { IdBlocoDepartamento: IdBlocoDepartamento } }) : Promise.resolve(undefined),
-            IdSituacaoSala ? this.prisma.situacaosala.findUnique({ where: { IdSituacaoSala: IdSituacaoSala } }) : Promise.resolve(undefined),
             IdTipoSala ? this.prisma.tiposala.findUnique({ where: { IdTipoSala: IdTipoSala } }) : Promise.resolve(undefined),
+            IdSituacaoSala ? this.prisma.situacaosala.findUnique({ where: { IdSituacaoSala: IdSituacaoSala } }) : Promise.resolve(undefined),
             DescricaoSala ? this.prisma.sala.findUnique({ where: { DescricaoSala: DescricaoSala } }) : Promise.resolve(undefined),
         ]);
-        if (!findBloco) throw new BadRequestException('O bloco que você está tentando adicionar não existe')
-        if (!findTipo) throw new BadRequestException('O tipo de sala que você está tentando aplicar não existe')
-        if (!findSituacao) throw new BadRequestException('A situacao selecionada não existe')
+        if (IdBlocoDepartamento && !findBloco) throw new BadRequestException('O bloco que você está tentando adicionar não existe')
+        if (IdTipoSala && !findTipo) throw new BadRequestException('O tipo de sala que você está tentando aplicar não existe')
+        if (IdSituacaoSala && !findSituacao) throw new BadRequestException('A situacao selecionada não existe')
         if (checkNome) throw new BadRequestException('A sala que você quer adicionar já existe')
 
 

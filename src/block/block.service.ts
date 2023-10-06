@@ -43,7 +43,7 @@ export class BlockService {
 
     async getBlock(id: string) {
 
-        const findBlock = await this.prisma.blocodepartamento.findUnique({ where: { IdBlocoDepartamento: parseInt(id) }, select: { IdBlocoDepartamento: true, departamento: true } })
+        const findBlock = await this.prisma.blocodepartamento.findUnique({ where: { IdBlocoDepartamento: parseInt(id) } })
 
         if (!findBlock) throw new NotFoundException('Esse bloco não existe');
 
