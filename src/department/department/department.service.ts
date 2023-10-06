@@ -93,13 +93,13 @@ export class DepartmentService {
 
         const [findBloco, findTipo, findSituacao, checkNome] = await Promise.all([
             IdBlocoDepartamento ? this.prisma.blocodepartamento.findUnique({ where: { IdBlocoDepartamento: IdBlocoDepartamento } }) : Promise.resolve(undefined),
-            IdSituacaoDepartamento ? this.prisma.situacaodepartamento.findUnique({ where: { IdSituacaoDepartamento: IdSituacaoDepartamento } }) : Promise.resolve(undefined),
             IdTipoDepartamento ? this.prisma.tipodepartamento.findUnique({ where: { IdTipoDepartamento: IdTipoDepartamento } }) : Promise.resolve(undefined),
+            IdSituacaoDepartamento ? this.prisma.situacaodepartamento.findUnique({ where: { IdSituacaoDepartamento: IdSituacaoDepartamento } }) : Promise.resolve(undefined),
             NomeDepartamento ? this.prisma.departamento.findUnique({ where: { NomeDepartamento: NomeDepartamento } }) : Promise.resolve(undefined),
         ]);
-        if (!findBloco) throw new BadRequestException('O bloco que você está tentando adicionar não existe')
-        if (!findTipo) throw new BadRequestException('O tipo de departamento que você está tentando aplicar não existe')
-        if (!findSituacao) throw new BadRequestException('A situacao do departamento selecionada não existe')
+        if (IdBlocoDepartamento && !findBloco) throw new BadRequestException('O bloco que você está tentando adicionar não existe')
+        if (IdTipoDepartamento && !findTipo) throw new BadRequestException('O tipo de departamento que você está tentando aplicar não existe')
+        if (IdSituacaoDepartamento && !findSituacao) throw new BadRequestException('A situacao do departamento selecionada não existe')
         if (checkNome) throw new BadRequestException('O departamento que você quer adicionar já existe')
 
 

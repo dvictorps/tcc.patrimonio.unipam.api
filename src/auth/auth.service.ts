@@ -11,22 +11,23 @@ export class AuthService {
     constructor(private prisma: PrismaService, private jwt: JwtService) { }
 
     async signup(dto: RegisterDto) {
-        const { Email, Senha, IdSituacaoPessoa, IdTipoPessoa, Usuario, Nome } = dto;
+        const { Email, Senha, IdTipoPessoa, Usuario, Nome } = dto;
 
-        const [checkSituation, checkTypePerson, foundEmail, foundUser] = await Promise.all([
-            this.prisma.situacaopessoa.findUnique({ where: { IdSituacaoPessoa: IdSituacaoPessoa } }),
-            this.prisma.tipopessoa.findUnique({ where: { IdTipoPessoa: IdTipoPessoa } }),
+
+        const defaultType = IdTipoPessoa ? IdTipoPessoa : 2;
+        const [checkTypePerson, foundEmail, foundUser] = await Promise.all([
+            this.prisma.tipopessoa.findUnique({ where: { IdTipoPessoa: defaultType } }),
             this.prisma.pessoa.findUnique({ where: { Usuario: Usuario } }),
             this.prisma.pessoa.findUnique({ where: { Email: Email } }),
         ]);
 
-        if (!checkSituation || !checkTypePerson) {
-            throw new BadRequestException('O campo de situação ou de tipo de pessoa não existe')
-        }
+        if (!checkTypePerson) throw new BadRequestException('esse tipo de pessoa não existe.')
 
         if (foundUser || foundEmail) {
             throw new BadRequestException('Email ou Usuário já existe')
         }
+
+
 
         const hashedPassword = await this.hashPassword(Senha)
 
@@ -36,8 +37,8 @@ export class AuthService {
                 Senha: hashedPassword,
                 Usuario: Usuario,
                 Nome: Nome,
-                situacaopessoa: { connect: { IdSituacaoPessoa: IdSituacaoPessoa } },
-                tipopessoa: { connect: { IdTipoPessoa: IdTipoPessoa } },
+                situacaopessoa: { connect: { IdSituacaoPessoa: 1 } },
+                tipopessoa: { connect: { IdTipoPessoa: defaultType } },
             }
         })
 

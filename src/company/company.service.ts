@@ -95,8 +95,8 @@ export class CompanyService {
             NomeEmpresa ? this.prisma.empresa.findUnique({ where: { NomeEmpresa: NomeEmpresa } }) : Promise.resolve(undefined),
         ]);
 
-        if (!findCidade) throw new BadRequestException('A cidade selecionada não existe')
-        if (checkNome) throw new BadRequestException('A empresa que você quer editar já existe')
+        if (IdCidade && !findCidade) throw new BadRequestException('A cidade selecionada não existe')
+        if (checkNome) throw new BadRequestException('A empresa que você quer mudar o nome já existe')
 
 
         await this.prisma.empresa.update({
