@@ -17,6 +17,8 @@ import { RoomSituationModule } from './rooms/roomSituation/roomSituation.module'
 import { RoomModule } from './rooms/rooms/room.module';
 import { StateModule } from './state/state.module';
 import { DepartmentSituationModule } from './department/departmentSituation/departmentSituation.module';
+import { PersonTypeModule } from './users/personType/personType.module';
+import { PersonSituationModule } from './users/personSituation/personSituation.module';
 
 @Module({
   imports: [AuthModule, PrismaModule,
@@ -26,7 +28,8 @@ import { DepartmentSituationModule } from './department/departmentSituation/depa
     DepTypeModule, DepartmentModule,
     ManufacturerModule, CompanyModule,
     RoomTypeModule, RoomSituationModule,
-    RoomModule, StateModule, DepartmentSituationModule],
+    RoomModule, StateModule, DepartmentSituationModule,
+    PersonTypeModule, PersonSituationModule],
   providers: [jwtStrategy]
 })
 export class AppModule { }

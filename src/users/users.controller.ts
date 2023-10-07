@@ -16,6 +16,7 @@ export class UsersController {
     return this.usersService.getMyUser(id);
   }
 
+  @Roles(Role.Protected)
   @Get()
   getUsers() {
     return this.usersService.getUsers();

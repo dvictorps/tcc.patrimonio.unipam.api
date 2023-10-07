@@ -14,14 +14,31 @@ export class UsersService {
 
         if (!user) throw new NotFoundException()
 
-        delete user.Senha
+        delete user.Senha;
 
-        return { user }
+        return user
 
     }
 
     async getUsers() {
-        return await this.prisma.pessoa.findMany({ select: { IdPessoa: true, Usuario: true, DataCriacao: true, } })
+        return await this.prisma.pessoa.findMany({
+            select: {
+                IdPessoa: true,
+                Nome: true,
+                Email: true,
+                Usuario: true,
+                DataCriacao: true,
+                DataModificacao: true,
+                IdTipoPessoa: true,
+                IdSituacaoPessoa: true
+
+
+            }
+        })
+
+
+
+
     }
 
     async updateUser(dto: UpdateUserDto, id: string) {

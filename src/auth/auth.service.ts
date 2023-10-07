@@ -14,9 +14,9 @@ export class AuthService {
         const { Email, Senha, IdTipoPessoa, Usuario, Nome } = dto;
 
 
-        const defaultType = IdTipoPessoa ? IdTipoPessoa : 2;
+
         const [checkTypePerson, foundEmail, foundUser] = await Promise.all([
-            this.prisma.tipopessoa.findUnique({ where: { IdTipoPessoa: defaultType } }),
+            this.prisma.tipopessoa.findUnique({ where: { IdTipoPessoa: IdTipoPessoa } }),
             this.prisma.pessoa.findUnique({ where: { Usuario: Usuario } }),
             this.prisma.pessoa.findUnique({ where: { Email: Email } }),
         ]);
@@ -38,7 +38,7 @@ export class AuthService {
                 Usuario: Usuario,
                 Nome: Nome,
                 situacaopessoa: { connect: { IdSituacaoPessoa: 1 } },
-                tipopessoa: { connect: { IdTipoPessoa: defaultType } },
+                tipopessoa: { connect: { IdTipoPessoa: IdTipoPessoa } },
             }
         })
 
