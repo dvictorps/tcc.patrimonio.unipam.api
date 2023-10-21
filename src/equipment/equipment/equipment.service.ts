@@ -73,7 +73,8 @@ export class EquipmentService {
         categoryValue: string,
         situationValue: string,
         manufacturerValue: string,
-        departmentValue: string
+        departmentValue: string,
+        roomValue: string
 
 
     ) {
@@ -119,6 +120,13 @@ export class EquipmentService {
                 equals: parseInt(departmentValue)
             }
         };
+
+        if (roomValue) {
+            where['IdSala'] = {
+                equals: parseInt(roomValue)
+            }
+        };
+
 
         const query = {
             take: takeValue,
@@ -350,7 +358,8 @@ export class EquipmentService {
         categoryValue: string,
         situationValue: string,
         manufacturerValue: string,
-        departmentValue: string
+        departmentValue: string,
+        roomValue: string
     ) {
 
         const where = {
@@ -392,6 +401,12 @@ export class EquipmentService {
         if (departmentValue) {
             where['IdDepartamento'] = {
                 equals: parseInt(departmentValue)
+            }
+        };
+
+        if (roomValue) {
+            where['IdSala'] = {
+                equals: parseInt(roomValue)
             }
         };
 

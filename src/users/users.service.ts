@@ -54,7 +54,7 @@ export class UsersService {
             this.prisma.pessoa.findFirst({ where: { Usuario: Usuario }, select: { IdPessoa: true } })
         ]);
 
-        if (checkUser) throw new BadRequestException('o usuário que você quer colocar já existe')
+        if (Usuario && checkUser) throw new BadRequestException('o usuário que você quer colocar já existe')
 
         if (!findUser) throw new BadRequestException('O usuário a ser editado não existe')
 

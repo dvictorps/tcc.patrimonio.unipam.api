@@ -30,7 +30,8 @@ export class EquipmentController {
         @Query('category') category: string,
         @Query('situation') situation: string,
         @Query('manufacturer') manufacturer: string,
-        @Query('department') department: string
+        @Query('department') department: string,
+        @Query('room') room: string
     ) {
 
         const skipValue = skip ? parseInt(skip, 10) : 0;
@@ -43,9 +44,10 @@ export class EquipmentController {
         const situationValue = situation ? situation : undefined;
         const manufacturerValue = manufacturer ? manufacturer : undefined;
         const departmentValue = department ? department : undefined;
+        const roomValue = room ? room : undefined;
 
         return this.equipmentService.getEquipments(skipValue, takeValue, searchPatrimValue, searchDescValue, searchSerialValue,
-            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue)
+            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue, roomValue)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -123,7 +125,8 @@ export class EquipmentController {
         @Query('category') category: string,
         @Query('situation') situation: string,
         @Query('manufacturer') manufacturer: string,
-        @Query('department') department: string
+        @Query('department') department: string,
+        @Query('room') room: string
     ) {
 
         const searchPatrimValue = searchPatrim ? searchPatrim : undefined;
@@ -134,9 +137,10 @@ export class EquipmentController {
         const situationValue = situation ? situation : undefined;
         const manufacturerValue = manufacturer ? manufacturer : undefined;
         const departmentValue = department ? department : undefined;
+        const roomValue = room ? room : undefined;
 
         return this.equipmentService.getEquipmentsFormated(searchPatrimValue, searchDescValue, searchSerialValue,
-            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue)
+            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue, roomValue)
     }
 
 
