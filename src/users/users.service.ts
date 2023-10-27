@@ -49,12 +49,15 @@ export class UsersService {
 
         const { Email, Senha, IdSituacaoPessoa, IdTipoPessoa, Usuario, Nome } = dto;
 
-        const [findUser, checkUser] = await Promise.all([
+        const [findUser, checkUser, checkEmail] = await Promise.all([
             this.prisma.pessoa.findFirst({ where: { IdPessoa: parseInt(id) }, select: { Usuario: true } }),
-            this.prisma.pessoa.findFirst({ where: { Usuario: Usuario }, select: { IdPessoa: true } })
+            this.prisma.pessoa.findFirst({ where: { Usuario: Usuario }, select: { IdPessoa: true } }),
+            this.prisma.pessoa.findUnique({ where: { Email: Email } })
         ]);
 
         if (Usuario && checkUser) throw new BadRequestException('o usuário que você quer colocar já existe')
+
+        if (checkEmail) throw new BadRequestException('o email que você quer colocar já existe')
 
         if (!findUser) throw new BadRequestException('O usuário a ser editado não existe')
 

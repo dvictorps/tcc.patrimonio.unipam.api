@@ -74,7 +74,9 @@ export class EquipmentService {
         situationValue: string,
         manufacturerValue: string,
         departmentValue: string,
-        roomValue: string
+        roomValue: string,
+        initialDateValue: string,
+        lastDateValue: string
 
 
     ) {
@@ -140,6 +142,14 @@ export class EquipmentService {
                 IdEquipamento: 'desc'
             }
         }
+
+        if (initialDateValue && lastDateValue) {
+            where['DataCadastro'] = {
+                gte: new Date(initialDateValue),
+                lte: new Date(lastDateValue)
+            }
+        }
+
 
 
         const data = await this.prisma.equipamento.findMany(query);
@@ -359,7 +369,9 @@ export class EquipmentService {
         situationValue: string,
         manufacturerValue: string,
         departmentValue: string,
-        roomValue: string
+        roomValue: string,
+        initialDateValue: string,
+        lastDateValue: string
     ) {
 
         const where = {
@@ -409,6 +421,13 @@ export class EquipmentService {
                 equals: parseInt(roomValue)
             }
         };
+
+        if (initialDateValue && lastDateValue) {
+            where['DataCadastro'] = {
+                gte: new Date(initialDateValue),
+                lte: new Date(lastDateValue)
+            }
+        }
 
 
         const data = await this.prisma.equipamento.findMany({

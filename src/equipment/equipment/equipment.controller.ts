@@ -31,7 +31,10 @@ export class EquipmentController {
         @Query('situation') situation: string,
         @Query('manufacturer') manufacturer: string,
         @Query('department') department: string,
-        @Query('room') room: string
+        @Query('room') room: string,
+        @Query('initialDate') initialDate: string,
+        @Query('lastDate') lastDate: string
+
     ) {
 
         const skipValue = skip ? parseInt(skip, 10) : 0;
@@ -45,9 +48,11 @@ export class EquipmentController {
         const manufacturerValue = manufacturer ? manufacturer : undefined;
         const departmentValue = department ? department : undefined;
         const roomValue = room ? room : undefined;
+        const initialDateValue = initialDate ? initialDate : undefined;
+        const lastDateValue = lastDate ? lastDate : undefined
 
         return this.equipmentService.getEquipments(skipValue, takeValue, searchPatrimValue, searchDescValue, searchSerialValue,
-            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue, roomValue)
+            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue, roomValue, initialDateValue, lastDateValue)
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -126,7 +131,9 @@ export class EquipmentController {
         @Query('situation') situation: string,
         @Query('manufacturer') manufacturer: string,
         @Query('department') department: string,
-        @Query('room') room: string
+        @Query('room') room: string,
+        @Query('initialDate') initialDate: string,
+        @Query('lastDate') lastDate: string
     ) {
 
         const searchPatrimValue = searchPatrim ? searchPatrim : undefined;
@@ -138,9 +145,12 @@ export class EquipmentController {
         const manufacturerValue = manufacturer ? manufacturer : undefined;
         const departmentValue = department ? department : undefined;
         const roomValue = room ? room : undefined;
+        const initialDateValue = initialDate ? initialDate : undefined;
+        const lastDateValue = lastDate ? lastDate : undefined
+
 
         return this.equipmentService.getEquipmentsFormated(searchPatrimValue, searchDescValue, searchSerialValue,
-            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue, roomValue)
+            companyValue, categoryValue, situationValue, manufacturerValue, departmentValue, roomValue, initialDateValue, lastDateValue)
     }
 
 
